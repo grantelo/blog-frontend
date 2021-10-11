@@ -10,9 +10,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({
     children
 }) => {
     return (
-        <Box className={"box"}>
+        <Box className={"wrapper"}>
             <Box className={"leftSide"}>
-                <LeftMenu />
+                <LeftMenu/>
             </Box>
             <Box className={"content"}>{children}</Box>
         </Box>

@@ -7,7 +7,7 @@ export const theme = createTheme({
                 disableRipple: true
             }
         },
-      MuiButton: {
+        MuiButton: {
             styleOverrides: {
                 text: {
                     '&:hover': {
@@ -30,6 +30,6 @@ export const theme = createTheme({
                     },
                 }
             }
-      }
+        }
     },
 })

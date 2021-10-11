@@ -1,15 +1,16 @@
 import React from 'react';
-import {Box} from "@mui/material";
+import {Stack} from "@mui/material";
 
 interface ListProps<T> {
     items: any[],
-    renderItem: (item: any) => T
+    renderItem: (item: any) => T,
 }
+
 
 export default function List<T>({items, renderItem}: ListProps<T>) {
     return (
-        <Box>
+        <Stack>
             {items.map(renderItem)}
-        </Box>
+        </Stack>
     );
 };
