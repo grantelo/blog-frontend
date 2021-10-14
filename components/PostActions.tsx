@@ -17,7 +17,10 @@ const PostActions = () => {
     return (
         <List
             items={items}
-            renderItem={item => <IconButton>{item}</IconButton>}
+            renderItem={item => <IconButton color={"primary"}>{item}</IconButton>}
+            direction={"row"}
+            justifyContent={"flex-end"}
+            alignItems={"center"}
         />
     );
 };

@@ -2,15 +2,17 @@ import React from 'react';
 import Link from "next/link"
 import Image from "next/image"
 import {Paper, Typography} from "@mui/material";
-import PostActions from "./PostActions";
+import PostActions from "../PostActions";
+
+import styles from "./Post.module.sass"
 
 const Post = () => {
     return (
-        <Paper>
+        <Paper className={styles.paper} elevation={3}>
             <Link href={`/news/test-123`}>
                 <a>
-                    <Typography variant={"h5"}>Первые дни в литве</Typography>
-                    <Typography>
+                    <Typography className={styles.title} variant={"h5"}>Первые дни в литве</Typography>
+                    <Typography className={styles.text}>
                         Пока одни не могли соотнести размеры животного и окружения, другие начали создавать
                         апокалиптические сюжеты с котом в главной роли.
                     </Typography>
