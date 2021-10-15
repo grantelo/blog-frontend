@@ -13,9 +13,7 @@ function MyApp({Component, pageProps}: AppProps) {
             <ThemeProvider theme={theme}>
                 <CssBaseline/>
                 <Header/>
-                <Container>
-                    <Component {...pageProps} />
-                </Container>
+                <Component {...pageProps} />
             </ThemeProvider>
         </>
     )
