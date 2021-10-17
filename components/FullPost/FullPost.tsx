@@ -1,8 +1,8 @@
 import React from 'react';
 import {Paper, Typography} from "@mui/material";
-import styles from "../components/Post/Post.module.sass";
+import styles from "../Post/Post.module.sass";
 import Image from "next/image";
-import PostActions from "../components/PostActions";
+import PostActions from "../PostActions";
 
 const FullPost = () => {
     return (

@@ -1,7 +1,8 @@
 import React from 'react';
 import Image from 'next/image'
 import Link from 'next/link'
-import {Box, Button, Container, IconButton, InputBase, Paper, Stack, Typography} from '@mui/material';
+import {Box, IconButton, Paper, Stack, Typography} from '@mui/material';
+import Button from '@mui/material/Button';
 import logo from "../../public/static/img/logo.svg"
 import InputSearch from "../InputSearch";
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined'

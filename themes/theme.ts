@@ -4,31 +4,37 @@ export const theme = createTheme({
     components: {
         MuiButtonBase: {
             defaultProps: {
-                disableRipple: true
+                disableRipple: true,
             }
         },
         MuiButton: {
+            defaultProps: {
+              color: "inherit"
+            },
             styleOverrides: {
+                root: {
+                    borderRadius: '8px',
+                },
                 text: {
                     '&:hover': {
                         backgroundColor: 'rgba(255, 255, 255, 0.5)',
                     },
                 },
                 contained: {
-                    backgroundColor: "#fff",
-                    color: "#000",
-                    boxShadow: "none",
-
+                    backgroundColor: '#fff',
+                    '&:hover': {
+                        backgroundColor: '#fff',
+                    },
                 },
                 containedPrimary: {
-                    backgroundColor: '#fff',
-                    boxShadow: "none",
+                    backgroundColor: '#4683d9',
 
                     '&:hover': {
                         boxShadow: "none",
-                        backgroundColor: '#fff',
+                        backgroundColor: '#437CCE',
                     },
-                }
+                },
+
             }
         }
     },

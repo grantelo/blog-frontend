@@ -18,7 +18,7 @@ const menuItems = [
     {text: "Подписки", icon: <FormatListBulletedIcon/>, path: "/subs"},
 ]
 
-const Index = () => {
+const LeftMenu = () => {
     return (
         <Box className={styles.menu}>
             <List
@@ -36,4 +36,4 @@ const Index = () => {
     );
 };
 
-export default Index;
+export default LeftMenu;
