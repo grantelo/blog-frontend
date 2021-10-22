@@ -14,11 +14,7 @@ export const theme = createTheme({
             styleOverrides: {
                 root: {
                     borderRadius: '8px',
-                },
-                text: {
-                    '&:hover': {
-                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                    },
+                    textTransform: "none",
                 },
                 contained: {
                     backgroundColor: '#fff',

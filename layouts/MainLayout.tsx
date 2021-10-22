@@ -4,15 +4,17 @@ import React from "react";
 import classNames from "classnames";
 
 interface MainLayoutProps {
-    fullWidth?: boolean
+    fullWidth?: boolean,
+    className?: string,
+    hideLeftMenu?: boolean
 }
 
-const MainLayout: React.FC<MainLayoutProps> = ({fullWidth, children}) => {
+const MainLayout: React.FC<MainLayoutProps> = ({fullWidth, hideLeftMenu, className, children}) => {
     return (
-        <Box className={"wrapper"}>
-            <Box className={"leftSide"}>
+        <Box className={classNames("wrapper", className)}>
+            {!hideLeftMenu && <Box className={"leftSide"}>
                 <LeftMenu/>
-            </Box>
+            </Box>}
             <Container>
                 <Box className={classNames("content", {"content--full": fullWidth})}>{children}</Box>
             </Container>

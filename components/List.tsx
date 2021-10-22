@@ -7,16 +7,18 @@ interface ListProps<T> {
     renderItem: (item: any) => T,
     direction?: ResponsiveStyleValue<'row' | 'row-reverse' | 'column' | 'column-reverse'>,
     justifyContent?: ResponsiveStyleValue<'flex-start' | 'flex-end' | 'center' | 'space-between' | "space-around" | "space-evenly">
-    alignItems?: ResponsiveStyleValue<'flex-start' | 'flex-end' | 'center' | 'strech' | "baseline">
+    alignItems?: ResponsiveStyleValue<'flex-start' | 'flex-end' | 'center' | 'strech' | "baseline">,
+    spacing?: number
 }
 
 
-export default function List<T>({items, renderItem, direction, justifyContent, alignItems}: ListProps<T>) {
+export default function List<T>({items, renderItem, direction, justifyContent, alignItems, spacing}: ListProps<T>) {
     return (
         <Stack
             direction={direction ?? "column"}
             justifyContent={justifyContent ?? "flex-start"}
             alignItems={alignItems ?? "stretch"}
+            spacing={spacing}
         >
             {items.map(renderItem)}
         </Stack>

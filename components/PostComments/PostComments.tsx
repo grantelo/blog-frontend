@@ -4,6 +4,7 @@ import AddCommentForm from "../AddCommentForm"
 
 import styles from "./PostComments.module.sass"
 import Comment from "../Comment";
+import {Box} from "@mui/system";
 
 const PostComments = () => {
     const [value, setValue] = React.useState<number>(0);
@@ -15,7 +16,7 @@ const PostComments = () => {
     return (
         <>
             <Paper className={styles.paper}>
-                <Container maxWidth={"sm"}>
+                <Box className={styles.container}>
                     <Typography
                         className={styles.title}
                         variant={"h6"}
@@ -28,9 +29,11 @@ const PostComments = () => {
                         <Tab label="По порядку"/>
                     </Tabs>
                     <Divider/>
-                    <AddCommentForm />
-                    <Comment />
-                </Container>
+                    <AddCommentForm/>
+                    <Comment/>
+                    <Comment/>
+                    <Comment/>
+                </Box>
             </Paper>
         </>
     );

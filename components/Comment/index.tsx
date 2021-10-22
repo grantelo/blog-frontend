@@ -1,9 +1,11 @@
 import React from 'react';
-import {Avatar, Box, Button, IconButton, Menu, MenuItem, Stack, Typography} from "@mui/material";
+import {Avatar, Box, Button, Divider, IconButton, Menu, MenuItem, Stack, Typography} from "@mui/material";
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+
+import styles from "./Comment.module.sass"
 
 const Comment = () => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -13,8 +15,11 @@ const Comment = () => {
     };
 
     return (
-        <Box>
-            <Stack direction={"row"} spacing={1}>
+        <Box className={styles.box}>
+            <Stack
+                direction={"row"}
+                spacing={1}
+            >
                 <Avatar src={"https://leonardo.osnova.io/9a07aef4-a8c3-388d-4661-08bae93feb0e/-/scale_crop/64x64/-/format/webp/"}/>
                 <Box>
                     <Typography>{"Bob Smith"}</Typography>
@@ -24,21 +29,23 @@ const Comment = () => {
             <Typography>
                 -20 сошиал линк. Товарищ Xi Jinping
             </Typography>
-            <Stack>
-                <Button >Ответить</Button>
+            <Stack direction={"row"}>
+                <Button className={styles.button} variant={"text"}>Ответить</Button>
                 <IconButton>
-
+                    <MoreHorizIcon/>
                 </IconButton>
                 <Menu
                     anchorEl={anchorEl}
                     elevation={2}
-                    open={Boolean(anchorEl)}
+                    open={!!anchorEl}
                     onClose={handleClose}
-                    keepMounted>
+                    keepMounted
+                >
                     <MenuItem onClick={handleClose}>Удалить</MenuItem>
                     <MenuItem onClick={handleClose}>Редактировать</MenuItem>
                 </Menu>
             </Stack>
+            <Divider />
         </Box>
     );
 };
