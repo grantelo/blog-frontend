@@ -6,7 +6,7 @@ import AuthDialog from "../components/AuthDialog";
 const Home: NextPage = () => {
     return (
         <MainLayout>
-            <AuthDialog open={true} handleClose={() => undefined} />
+            <Post />
         </MainLayout>
     )
 }

@@ -10,9 +10,21 @@ import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 import styles from "./Header.module.sass"
+import AuthDialog from '../AuthDialog';
 
 
 const Header = () => {
+    const [visibleAuthDialog, setVisibleAuthDialog] = React.useState<boolean>(false)
+
+    const handleCloseAuthDialog = () => {
+        console.log("close!")
+        setVisibleAuthDialog(false)
+    }
+
+    const handleOpenAuthDialog = () => {
+        setVisibleAuthDialog(true)
+    }
+
     return (
         <Paper className={styles.paper}>
             <Stack
@@ -48,12 +60,13 @@ const Header = () => {
                     <IconButton>
                         <NotificationsOutlinedIcon/>
                     </IconButton>
-                    <Box className={styles.loginButton}>
+                    <Box className={styles.loginButton} onClick={handleOpenAuthDialog}>
                         <AccountCircleOutlinedIcon/>
                         <Typography>Войти</Typography>
                     </Box>
                 </Stack>
             </Stack>
+            <AuthDialog open={visibleAuthDialog} handleClose={handleCloseAuthDialog}/>
         </Paper>
     );
 };

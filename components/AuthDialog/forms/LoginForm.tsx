@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {Button, Stack} from "@mui/material";
 import FormField from "../../FormField";
 import * as yup from "yup";
 import {useForm, FormProvider} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
+import { LoginFormSchema } from '../../../utils/validations';
 
 
 interface IFormInputs {
@@ -11,17 +12,18 @@ interface IFormInputs {
     password: string
 }
 
-const schema = yup.object({
-    email: yup.string().required().email(),
-    password: yup.string().required().min(8)
-}).required()
+interface LoginFormProps {
+    onOpenRegistrationForm: () => void
+}
 
-const LoginForm = () => {
+const LoginForm: FC<LoginFormProps> = ({onOpenRegistrationForm}) => {
     const methods = useForm<IFormInputs>({
-        resolver: yupResolver(schema)
+        resolver: yupResolver(LoginFormSchema)
     });
 
-    const onSubmit = (data: IFormInputs) => console.log(data)
+    const onSubmit = async (data: IFormInputs) => {
+        console.log(data)
+    }
 
     return (
         <FormProvider {...methods} >
@@ -46,6 +48,7 @@ const LoginForm = () => {
                         Войти
                     </Button>
                     <Button
+                        onClick={onOpenRegistrationForm}
                         variant={"text"}
                         color={"primary"}
                     >
