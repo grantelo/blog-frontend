@@ -8,7 +8,6 @@ interface FormFieldProps {
 }
 
 const FormField: FC<FormFieldProps> = ({name, label}) => {
-    console.log(useFormContext())
     const {register, formState: { errors, touchedFields}} = useFormContext()
 
     return (

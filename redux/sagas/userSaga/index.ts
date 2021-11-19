@@ -1,35 +1,67 @@
-import {take, fork, call, put, cancel, ForkEffect, TakeEffect, StrictEffect, CancelledEffect, cancelled} from "redux-saga/effects"
+import {
+    take,
+    fork,
+    call,
+    put,
+    cancel,
+    CancelledEffect,
+    cancelled, takeEvery, apply
+} from "redux-saga/effects"
 import {Task} from '@redux-saga/types'
-import {FetchUserLoginAction, UserActionTypes, FetchUserLogoutAction, FetchUserLoginErrorAction} from "../../types/user"
+import {
+    UserActionTypes,
+    RequestUserLoginAction, RequestUserLogoutAction, RequestUserLoginErrorAction, RequestUserRegistrationAction
+} from "../../types/user"
 import userApi from "../../../utils/api/user"
 import AuthResponse from "../../../models/response/AuthResponse"
 import {AxiosResponse} from "axios"
+import {
+    requestUserLoginErrorAction,
+    requestUserLoginSuccessAction,
+    requestUserRegistrationErrorAction, requestUserRegistrationSuccessAction,
+    setIsLoadingUser
+} from "../../actions/user";
+import {RegistrationResponse} from "../../../models/response/RegistrationResponse";
 
 function* authorize(email: string, password: string) {
     try {
+        yield put(setIsLoadingUser(true))
         const response: AxiosResponse<AuthResponse> = yield call(userApi.login, {email, password})
-        yield put({type: UserActionTypes.FETCH_USER_LOGIN_SUCCESS, payload: response.data.user})
-        yield call(localStorage.setItem, "accessToken", response.data.accessToken)
-        return response.data.accessToken
-    } catch (e) {
-        yield put({type: UserActionTypes.FETCH_USER_LOGIN_ERROR, payload: e})
-    }
-    finally {
-        if((yield cancelled()) as CancelledEffect) {
+        yield put(requestUserLoginSuccessAction(response.data.user))
+        yield apply(localStorage, localStorage.setItem, ["accessToken", response.data.accessToken])
+    } catch (e: any) {
+        yield put(requestUserLoginErrorAction(e?.response?.data))
+    } finally {
+        if ((yield cancelled()) as CancelledEffect) {
             yield put({type: UserActionTypes.SET_IS_LOADING_USER, payload: false})
         }
     }
 }
 
-function* loginSaga() {
-    while (true) {
-        const {payload: {email, password}}: FetchUserLoginAction = yield take(UserActionTypes.FETCH_USER_LOGIN)
-        const task: Task = yield fork(authorize, email, password)
-        const action: FetchUserLogoutAction | FetchUserLoginErrorAction = yield take([UserActionTypes.FETCH_USER_LOGOUT, UserActionTypes.FETCH_USER_LOGIN_ERROR])
+function* registration({payload: {fullName, email, password}}: RequestUserRegistrationAction) {
+    try {
+        put(setIsLoadingUser(true))
+        const response: AxiosResponse<RegistrationResponse> = yield call(userApi.registration, {fullName, email, password})
+        yield put(requestUserRegistrationSuccessAction(response.data.user))
+        yield apply(localStorage, localStorage.setItem, ["accessToken", response.data.accessToken])
+    } catch (e: any) {
+        yield put(requestUserRegistrationErrorAction(e.response.data))
+    }
+}
 
-        if (action.type == UserActionTypes.FETCH_USER_LOGOUT)
+export function* loginSaga() {
+    while (true) {
+        const {payload: {email, password}}: RequestUserLoginAction = yield take(UserActionTypes.REQUEST_USER_LOGIN)
+        const task: Task = yield fork(authorize, email, password)
+        const action: RequestUserLogoutAction | RequestUserLoginErrorAction = yield take([UserActionTypes.REQUEST_USER_LOGOUT, UserActionTypes.REQUEST_USER_LOGIN_ERROR])
+
+        if (action.type == UserActionTypes.REQUEST_USER_LOGOUT)
             yield cancel(task)
 
-        yield call(localStorage.removeItem, 'accessToken')
+        yield apply(localStorage, localStorage.removeItem, ['accessToken'])
     }
+}
+
+export function* registrationSaga() {
+    yield takeEvery(UserActionTypes.REQUEST_USER_REGISTRATION, registration)
 }

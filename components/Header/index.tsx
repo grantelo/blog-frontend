@@ -17,7 +17,6 @@ const Header = () => {
     const [visibleAuthDialog, setVisibleAuthDialog] = React.useState<boolean>(false)
 
     const handleCloseAuthDialog = () => {
-        console.log("close!")
         setVisibleAuthDialog(false)
     }
 
@@ -47,7 +46,7 @@ const Header = () => {
                         </a>
                     </Link>
                     <InputSearch/>
-                    <Link href={"write"}>
+                    <Link href={"/write"}>
                         <a>
                             <Button className={styles.button} variant={"contained"}>Новая запись</Button>
                         </a>

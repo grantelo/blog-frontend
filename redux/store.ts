@@ -1,25 +1,30 @@
-import {createStore, AnyAction, Store} from 'redux';
-import {createWrapper, Context, HYDRATE} from 'next-redux-wrapper';
+import {applyMiddleware, combineReducers, compose, createStore, Store} from 'redux';
+import {createWrapper, Context} from 'next-redux-wrapper';
+import rootReducer from "./reducers";
+import createSagaMiddleware from "@redux-saga/core";
+import {Task} from "@redux-saga/types";
+import rootSaga from "./sagas";
 
-export interface State {
-    tick: string;
+export type RootState = ReturnType<typeof rootReducer>
+
+export interface SagaStore extends Store {
+    sagaTask?: Task;
 }
 
-// create your reducer
-const reducer = (state: State = {tick: 'init'}, action: AnyAction) => {
-    switch (action.type) {
-        case HYDRATE:
-            // Attention! This will overwrite client state! Real apps should use proper reconciliation.
-            return {...state, ...action.payload};
-        case 'TICK':
-            return {...state, tick: action.payload};
-        default:
-            return state;
-    }
+let composeEnhancers = compose;
+
+if(typeof window !== "undefined") {
+    composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+}
+
+export const makeStore = (context: Context) => {
+    const sagaMiddleware = createSagaMiddleware();
+    const store = createStore(rootReducer, composeEnhancers(applyMiddleware(sagaMiddleware)));
+
+    (store as SagaStore).sagaTask = sagaMiddleware.run(rootSaga);
+
+    return store;
 };
 
-// create a makeStore function
-const makeStore = (context: Context) => createStore(reducer);
+export const wrapper = createWrapper<Store<RootState>>(makeStore, {debug: true});
 
-// export an assembled wrapper
-export const wrapper = createWrapper<Store<State>>(makeStore, {debug: true});

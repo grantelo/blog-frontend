@@ -1,28 +1,35 @@
 import React, {FC} from 'react';
-import {Button, Stack} from "@mui/material";
+import {Alert, Button, Stack} from "@mui/material";
 import FormField from "../../FormField";
 import * as yup from "yup";
 import {useForm, FormProvider} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-import { LoginFormSchema } from '../../../utils/validations';
+import {LoginFormSchema} from '../../../utils/validations';
+import {useDispatch} from "react-redux";
+import IError from "../../../models/IError";
+import LoginRequest from "../../../models/request/LoginRequest";
+import {RequestUserLoginAction} from "../../../redux/types/user";
 
 
-interface IFormInputs {
-    email: string
-    password: string
-}
+interface IFormInputs extends LoginRequest {}
 
 interface LoginFormProps {
-    onOpenRegistrationForm: () => void
+    requestUserLoginAction: (payload: LoginRequest) => RequestUserLoginAction,
+    onOpenRegistrationForm: () => void,
+    handleClose: () => void
+    error: IError
 }
 
-const LoginForm: FC<LoginFormProps> = ({onOpenRegistrationForm}) => {
+const LoginForm: FC<LoginFormProps> = ({requestUserLoginAction, handleClose, onOpenRegistrationForm, error}) => {
+    const dispatch = useDispatch()
+
     const methods = useForm<IFormInputs>({
         resolver: yupResolver(LoginFormSchema)
     });
 
-    const onSubmit = async (data: IFormInputs) => {
-        console.log(data)
+    const onSubmit = async (payload: IFormInputs) => {
+        handleClose()
+        requestUserLoginAction(payload)
     }
 
     return (
@@ -36,6 +43,7 @@ const LoginForm: FC<LoginFormProps> = ({onOpenRegistrationForm}) => {
                     name={"password"}
                     label={"Пароль"}
                 />
+                {error?.message && <Alert sx={{marginBottom: "20px"}} severity={"error"}>{error?.message}</Alert>}
                 <Stack
                     direction={"row"}
                     justifyContent={"space-between"}

@@ -5,8 +5,10 @@ import { CssBaseline} from "@mui/material";
 import {ThemeProvider} from '@mui/material/styles';
 import {theme} from "../themes/theme";
 import Header from "../components/Header/index"
+import {wrapper} from "../redux/store";
 
 import '../styles/globals.sass'
+
 
 
 function MyApp({Component, pageProps}: AppProps) {
@@ -28,4 +30,4 @@ function MyApp({Component, pageProps}: AppProps) {
     )
 }
 
-export default MyApp
+export default wrapper.withRedux(MyApp)

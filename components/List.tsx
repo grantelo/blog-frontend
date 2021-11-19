@@ -4,7 +4,7 @@ import {Stack} from "@mui/material";
 
 interface ListProps<T> {
     items: any[],
-    renderItem: (item: any) => T,
+    renderItem: (item: any, i?: number) => T,
     direction?: ResponsiveStyleValue<'row' | 'row-reverse' | 'column' | 'column-reverse'>,
     justifyContent?: ResponsiveStyleValue<'flex-start' | 'flex-end' | 'center' | 'space-between' | "space-around" | "space-evenly">
     alignItems?: ResponsiveStyleValue<'flex-start' | 'flex-end' | 'center' | 'strech' | "baseline">,
