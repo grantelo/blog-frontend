@@ -1,5 +1,5 @@
 export default interface IError {
-    message: string,
+    message: Array<Object>,
     response: any,
     statusCode: number
 }

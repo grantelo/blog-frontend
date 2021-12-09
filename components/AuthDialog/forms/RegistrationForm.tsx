@@ -13,24 +13,19 @@ interface IFormInputs extends RegistrationRequest {}
 interface RegistrationFormProps {
     requestUserRegistrationAction: (payload: RegistrationRequest) => RequestUserRegistrationAction,
     onOpenLoginForm: () => void,
-    handleClose: () => void
+    handleClose: () => void,
+    isLoading: boolean
     error: IError
 }
 
-const RegistrationForm: FC<RegistrationFormProps> = ({requestUserRegistrationAction, handleClose, onOpenLoginForm, error}) => {
+const RegistrationForm: FC<RegistrationFormProps> = ({requestUserRegistrationAction, onOpenLoginForm, isLoading, error}) => {
     const methods = useForm<IFormInputs>({
         resolver: yupResolver(RegistrationFormSchema)
     });
-    const {isSubmitting} = useFormState({
-        control: methods.control
-    })
 
     const onSubmit = (payload: RegistrationRequest) => {
-        //handleClose()
         requestUserRegistrationAction(payload)
     }
-
-    console.log(isSubmitting)
 
     return (
         <FormProvider {...methods}>
@@ -38,10 +33,10 @@ const RegistrationForm: FC<RegistrationFormProps> = ({requestUserRegistrationAct
                 <FormField name={"fullName"} label={"Имя и фамилия"}/>
                 <FormField name={"email"} label={"Почта"}/>
                 <FormField name={"password"} label={"Пароль"}/>
-                {error?.message && <Alert sx={{marginBottom: "20px"}} severity={"error"}>{error?.message}</Alert>}
+                {error.message && <Alert sx={{marginBottom: "20px"}} severity={"error"}>{error.message.map(Object.values)}</Alert>}
                 <Stack direction={"row"} justifyContent={"space-between"}>
-                    <Button type={"submit"} variant={"contained"} color={"primary"} disabled={isSubmitting}>Зарегестрироваться</Button>
-                    <Button onClick={onOpenLoginForm} variant={"text"} color={"primary"}>Войти</Button>
+                    <Button type={"submit"} variant={"contained"} color={"primary"} disabled={isLoading}>Зарегестрироваться</Button>
+                    <Button onClick={onOpenLoginForm} disabled={isLoading} variant={"text"} color={"primary"}>Войти</Button>
                 </Stack>
             </form>
         </FormProvider>

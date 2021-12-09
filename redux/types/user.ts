@@ -17,6 +17,7 @@ export enum UserActionTypes {
 
 export interface UserState {
     user: IUser,
+    isAuth: boolean,
     error: IError
     isLoading: boolean
 }
@@ -64,5 +65,7 @@ export type UserActions = RequestUserLoginAction
     | RequestUserLoginSuccessAction
     | RequestUserLoginErrorAction
     | RequestUserRegistrationAction
+    | RequestUserRegistrationSuccessAction
+    | RequestUserRegistrationErrorAction
     | RequestUserLogoutAction
     | SetIsLoadingUser

@@ -9,6 +9,7 @@ import {useDispatch} from "react-redux";
 import IError from "../../../models/IError";
 import LoginRequest from "../../../models/request/LoginRequest";
 import {RequestUserLoginAction} from "../../../redux/types/user";
+import {IUser} from "../../../models/IUser";
 
 
 interface IFormInputs extends LoginRequest {}
@@ -16,11 +17,12 @@ interface IFormInputs extends LoginRequest {}
 interface LoginFormProps {
     requestUserLoginAction: (payload: LoginRequest) => RequestUserLoginAction,
     onOpenRegistrationForm: () => void,
-    handleClose: () => void
+    handleClose: () => void,
+    isLoading: boolean,
     error: IError
 }
 
-const LoginForm: FC<LoginFormProps> = ({requestUserLoginAction, handleClose, onOpenRegistrationForm, error}) => {
+const LoginForm: FC<LoginFormProps> = ({requestUserLoginAction, handleClose, onOpenRegistrationForm, isLoading, error}) => {
     const dispatch = useDispatch()
 
     const methods = useForm<IFormInputs>({
@@ -28,7 +30,6 @@ const LoginForm: FC<LoginFormProps> = ({requestUserLoginAction, handleClose, onO
     });
 
     const onSubmit = async (payload: IFormInputs) => {
-        handleClose()
         requestUserLoginAction(payload)
     }
 
@@ -57,6 +58,7 @@ const LoginForm: FC<LoginFormProps> = ({requestUserLoginAction, handleClose, onO
                     </Button>
                     <Button
                         onClick={onOpenRegistrationForm}
+                        disabled={isLoading}
                         variant={"text"}
                         color={"primary"}
                     >

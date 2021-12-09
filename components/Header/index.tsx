@@ -11,18 +11,22 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 
 import styles from "./Header.module.sass"
 import AuthDialog from '../AuthDialog';
+import * as _ from "lodash";
 
 
 const Header = () => {
     const [visibleAuthDialog, setVisibleAuthDialog] = React.useState<boolean>(false)
 
     const handleCloseAuthDialog = () => {
+        console.log("close")
         setVisibleAuthDialog(false)
     }
 
     const handleOpenAuthDialog = () => {
         setVisibleAuthDialog(true)
     }
+
+
 
     return (
         <Paper className={styles.paper}>

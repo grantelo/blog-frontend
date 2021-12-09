@@ -42,6 +42,7 @@ function* registration({payload: {fullName, email, password}}: RequestUserRegist
     try {
         yield put(setIsLoadingUser(true))
         const response: AxiosResponse<RegistrationResponse> = yield call(userApi.registration, {fullName, email, password})
+        console.log(response.data)
         yield put(requestUserRegistrationSuccessAction(response.data.user))
         yield apply(localStorage, localStorage.setItem, ["accessToken", response.data.accessToken])
     } catch (e: any) {
