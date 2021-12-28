@@ -1,9 +1,10 @@
 import {combineReducers} from "redux";
-import {store} from "next/dist/build/output/store";
 import user from "./user";
+import app from "./app";
 
 const rootReducer = combineReducers({
-    user
+    user,
+    app
 })
 
 export default rootReducer

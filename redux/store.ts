@@ -17,14 +17,18 @@ if(typeof window !== "undefined") {
     composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
 }
 
+let store: Store;
+
 export const makeStore = (context: Context) => {
     const sagaMiddleware = createSagaMiddleware();
-    const store = createStore(rootReducer, composeEnhancers(applyMiddleware(sagaMiddleware)));
+    store = createStore(rootReducer, composeEnhancers(applyMiddleware(sagaMiddleware)));
 
     (store as SagaStore).sagaTask = sagaMiddleware.run(rootSaga);
 
     return store;
 };
+
+export {store}
 
 export const wrapper = createWrapper<Store<RootState>>(makeStore, {debug: true});
 

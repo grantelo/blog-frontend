@@ -13,6 +13,7 @@ export enum UserActionTypes {
     REQUEST_USER_LOGIN_SUCCESS = "REQUEST_USER_SUCCESS",
     REQUEST_USER_LOGIN_ERROR = "REQUEST_USER_LOGIN_ERROR",
     REQUEST_USER_LOGOUT = "REQUEST_USER_LOGOUT",
+    REQUEST_CHECK_AUTH_USER = "REQUEST_CHECK_AUTH_USER"
 }
 
 export interface UserState {
@@ -56,6 +57,10 @@ export interface RequestUserLogoutAction {
     type: UserActionTypes.REQUEST_USER_LOGOUT
 }
 
+export interface RequestCheckAuthUser {
+    type: UserActionTypes.REQUEST_CHECK_AUTH_USER
+}
+
 export interface SetIsLoadingUser {
     type: UserActionTypes.SET_IS_LOADING_USER,
     payload: boolean
@@ -68,4 +73,5 @@ export type UserActions = RequestUserLoginAction
     | RequestUserRegistrationSuccessAction
     | RequestUserRegistrationErrorAction
     | RequestUserLogoutAction
+    | RequestCheckAuthUser
     | SetIsLoadingUser

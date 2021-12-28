@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import FormField from "../../FormField";
 import {Alert, Button, Stack} from "@mui/material";
 import {FormProvider, useForm, useFormState} from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { RegistrationFormSchema } from '../../../utils/validations';
 import IError from "../../../models/IError";
 import {RequestUserRegistrationAction} from "../../../redux/types/user";

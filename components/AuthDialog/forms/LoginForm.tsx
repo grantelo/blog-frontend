@@ -3,7 +3,7 @@ import {Alert, Button, Stack} from "@mui/material";
 import FormField from "../../FormField";
 import * as yup from "yup";
 import {useForm, FormProvider} from "react-hook-form";
-import {yupResolver} from "@hookform/resolvers/yup";
+import {yupResolver} from "@hookform/resolvers/yup/dist/yup";
 import {LoginFormSchema} from '../../../utils/validations';
 import {useDispatch} from "react-redux";
 import IError from "../../../models/IError";

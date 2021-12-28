@@ -22,13 +22,14 @@ import {
     setIsLoadingUser
 } from "../../actions/user";
 import {RegistrationResponse} from "../../../models/response/RegistrationResponse";
+import nookies, {destroyCookie, setCookie} from "nookies";
 
 function* authorize(email: string, password: string) {
     try {
         yield put(setIsLoadingUser(true))
         const response: AxiosResponse<AuthResponse> = yield call(userApi.login, {email, password})
         yield put(requestUserLoginSuccessAction(response.data.user))
-        yield apply(localStorage, localStorage.setItem, ["accessToken", response.data.accessToken])
+        yield call(setCookie, null, "accessToken", response.data.accessToken)
     } catch (e: any) {
         yield put(requestUserLoginErrorAction(e?.response?.data))
     } finally {
@@ -44,11 +45,22 @@ function* registration({payload: {fullName, email, password}}: RequestUserRegist
         const response: AxiosResponse<RegistrationResponse> = yield call(userApi.registration, {fullName, email, password})
         console.log(response.data)
         yield put(requestUserRegistrationSuccessAction(response.data.user))
-        yield apply(localStorage, localStorage.setItem, ["accessToken", response.data.accessToken])
+        yield call(setCookie, null, "accessToken", response.data.accessToken)
     } catch (e: any) {
         yield put(requestUserRegistrationErrorAction(e.response.data))
     }
 }
+
+/*
+export function* checkAuthUser() {
+    try {
+        const response: AxiosResponse<AuthResponse> = yield call(userApi.checkAuthUser)
+        //nookies.set("accessToken", )
+    } catch () {
+
+    }
+}
+*/
 
 export function* loginSaga() {
     while (true) {
@@ -59,10 +71,15 @@ export function* loginSaga() {
         if (action.type == UserActionTypes.REQUEST_USER_LOGOUT)
             yield cancel(task)
 
-        yield apply(localStorage, localStorage.removeItem, ['accessToken'])
+        yield call(destroyCookie, null, "accessToken")
     }
 }
 
 export function* registrationSaga() {
     yield takeEvery(UserActionTypes.REQUEST_USER_REGISTRATION, registration)
 }
+
+/*export function* checkAuthUserSaga() {
+    yield take(UserActionTypes.REQUEST_CHECK_AUTH_USER)
+    yield fork(checkAuthUser)
+}*/

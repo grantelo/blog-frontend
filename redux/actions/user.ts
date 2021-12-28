@@ -1,7 +1,12 @@
 import {
-    RequestUserLoginAction, RequestUserLoginErrorAction, RequestUserLoginSuccessAction,
+    RequestCheckAuthUser,
+    RequestUserLoginAction,
+    RequestUserLoginErrorAction,
+    RequestUserLoginSuccessAction,
     RequestUserLogoutAction,
-    RequestUserRegistrationAction, RequestUserRegistrationErrorAction, RequestUserRegistrationSuccessAction,
+    RequestUserRegistrationAction,
+    RequestUserRegistrationErrorAction,
+    RequestUserRegistrationSuccessAction,
     SetIsLoadingUser,
     UserActionTypes
 } from "../types/user";
@@ -43,6 +48,10 @@ export const requestUserLoginErrorAction = (payload: IError): RequestUserLoginEr
 
 export const requestUserLogoutAction = (): RequestUserLogoutAction => ({
     type: UserActionTypes.REQUEST_USER_LOGOUT
+})
+
+export const requestCheckAuthUser = (): RequestCheckAuthUser => ({
+    type: UserActionTypes.REQUEST_CHECK_AUTH_USER
 })
 
 export const setIsLoadingUser = (payload: boolean): SetIsLoadingUser => ({

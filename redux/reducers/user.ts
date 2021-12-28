@@ -1,6 +1,8 @@
 import {IUser} from "../../models/IUser";
 import {UserActions, UserActionTypes, UserState} from "../types/user";
 import IError from "../../models/IError";
+import {HYDRATE} from "next-redux-wrapper";
+import {AnyAction} from "redux";
 
 
 const initialState: UserState = {
@@ -10,8 +12,10 @@ const initialState: UserState = {
     isLoading: false,
 }
 
-const user = (state: UserState = initialState, action: UserActions): UserState => {
+const user = (state: UserState = initialState, action: AnyAction): UserState => {
     switch (action.type) {
+        case HYDRATE:
+            return {...state, ...action.payload.user}
 
         case UserActionTypes.SET_IS_LOADING_USER:
             return {...state, isLoading: action.payload}
