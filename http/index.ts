@@ -19,8 +19,6 @@ instance.interceptors.request.use(config => {
 instance.interceptors.response.use(config => {
     return config
 }, async error => {
-    console.log("error:")
-    console.log(error.response.statusText)
 
     const originalRequest = error.config
 

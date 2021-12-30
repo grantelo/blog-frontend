@@ -17,13 +17,13 @@ const Subs: NextPage = () => {
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async (context: NextPageContext) => {
-    console.log(nookies.get(context))
-    await axios.get("http://localhost:5000/auth/refresh", {
-        withCredentials: true,
-        headers: {
-            Cookie: context.req?.headers.cookie!
-        }
-    })
+    // console.log(nookies.get(context))
+    // await axios.get("http://localhost:5000/auth/refresh", {
+    //     withCredentials: true,
+    //     headers: {
+    //         Cookie: context.req?.headers.cookie!
+    //     }
+    // })
     //await fetch("http://localhost:5000/auth/refresh", {credentials: "include"})
 })
 

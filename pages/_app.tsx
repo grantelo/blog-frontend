@@ -45,10 +45,7 @@ function MyApp({Component, pageProps}: AppProps) {
 }
 
 MyApp.getInitialProps = wrapper.getInitialAppProps((store: Store) => async (context: AppContext) => {
-    // console.log("app")
-    //
-    // instance.defaults.headers.common['Authorization'] = "Bearer " + nookies.get(context.ctx).accessToken;
-    // console.log("accessToken:" + nookies.get(context.ctx).accessToken)
+    instance.defaults.headers.common['Authorization'] = "Bearer " + nookies.get(context.ctx).accessToken;
 
     const pageProps = {
         ...(await App.getInitialProps(context)).pageProps,
