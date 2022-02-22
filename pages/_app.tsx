@@ -10,11 +10,9 @@ import Header from "../components/Header/index"
 import {SagaStore, wrapper} from "../redux/store";
 
 import '../styles/globals.sass'
-import {NextPageContext} from "next";
 import {Store} from "redux";
-import {initializationApp} from "../redux/actions/app";
-import instance from "../http";
-import nookies from "nookies";
+import Api from "../utils/api";
+import {setUserAction} from "../redux/actions/user";
 
 
 function MyApp({Component, pageProps}: AppProps) {
@@ -44,8 +42,15 @@ function MyApp({Component, pageProps}: AppProps) {
     )
 }
 
-MyApp.getInitialProps = wrapper.getInitialAppProps((store: Store) => async (context: AppContext) => {
-    instance.defaults.headers.common['Authorization'] = "Bearer " + nookies.get(context.ctx).accessToken;
+MyApp.getInitialProps = wrapper.getInitialAppProps((store: Store) => async (context) => {
+    try {
+        const response = await Api(context.ctx).user.getMe()
+
+        store.dispatch(setUserAction(response.data))
+    } catch (e) {
+        console.log("error in getinitialprops")
+        console.log(e)
+    }
 
     const pageProps = {
         ...(await App.getInitialProps(context)).pageProps,
@@ -59,6 +64,7 @@ MyApp.getInitialProps = wrapper.getInitialAppProps((store: Store) => async (cont
     }
 
     return {pageProps};
+
 })
 
 export default wrapper.withRedux(MyApp)

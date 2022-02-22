@@ -1,5 +1,4 @@
 import {
-    RequestCheckAuthUser,
     RequestUserLoginAction,
     RequestUserLoginErrorAction,
     RequestUserLoginSuccessAction,
@@ -8,12 +7,18 @@ import {
     RequestUserRegistrationErrorAction,
     RequestUserRegistrationSuccessAction,
     SetIsLoadingUser,
+    SetUserAction,
     UserActionTypes
 } from "../types/user";
 import LoginRequest from "../../models/request/LoginRequest";
 import RegistrationRequest from "../../models/request/RegistrationRequest";
 import {IUser} from "../../models/IUser";
 import IError from "../../models/IError";
+
+export const setUserAction = (payload: IUser): SetUserAction => ({
+    type: UserActionTypes.SET_USER,
+    payload
+})
 
 export const requestUserRegistrationAction = (payload: RegistrationRequest): RequestUserRegistrationAction => ({
     type: UserActionTypes.REQUEST_USER_REGISTRATION,
@@ -48,10 +53,6 @@ export const requestUserLoginErrorAction = (payload: IError): RequestUserLoginEr
 
 export const requestUserLogoutAction = (): RequestUserLogoutAction => ({
     type: UserActionTypes.REQUEST_USER_LOGOUT
-})
-
-export const requestCheckAuthUser = (): RequestCheckAuthUser => ({
-    type: UserActionTypes.REQUEST_CHECK_AUTH_USER
 })
 
 export const setIsLoadingUser = (payload: boolean): SetIsLoadingUser => ({

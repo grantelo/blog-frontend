@@ -13,7 +13,6 @@ import useTypedSelector from "../../hooks/useTypedSelector";
 import {useDispatch} from "react-redux";
 import {UserState} from "../../redux/types/user";
 
-
 interface AuthDialogProps {
     open: boolean;
     handleClose: () => void

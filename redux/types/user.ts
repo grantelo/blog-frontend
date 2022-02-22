@@ -5,6 +5,7 @@ import {IUser} from "../../models/IUser";
 import IError from "../../models/IError";
 
 export enum UserActionTypes {
+    SET_USER = "SET_USER",
     SET_IS_LOADING_USER = "SET_IS_LOADING_USER",
     REQUEST_USER_REGISTRATION = "REQUEST_USERS_REGISTRATION",
     REQUEST_USER_REGISTRATION_SUCCESS = "REQUEST_USERS_REGISTRATION_SUCCESS",
@@ -21,6 +22,11 @@ export interface UserState {
     isAuth: boolean,
     error: IError
     isLoading: boolean
+}
+
+export interface SetUserAction {
+    type: UserActionTypes.SET_USER,
+    payload: IUser
 }
 
 export interface RequestUserLoginAction {
@@ -66,7 +72,8 @@ export interface SetIsLoadingUser {
     payload: boolean
 }
 
-export type UserActions = RequestUserLoginAction
+export type UserActions = SetUserAction
+    | RequestUserLoginAction
     | RequestUserLoginSuccessAction
     | RequestUserLoginErrorAction
     | RequestUserRegistrationAction

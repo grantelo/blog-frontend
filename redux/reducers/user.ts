@@ -17,15 +17,18 @@ const user = (state: UserState = initialState, action: AnyAction): UserState => 
         case HYDRATE:
             return {...state, ...action.payload.user}
 
+        case UserActionTypes.SET_USER:
+            return {...state, user: action.payload, isAuth: true}
+
         case UserActionTypes.SET_IS_LOADING_USER:
             return {...state, isLoading: action.payload}
 
         case UserActionTypes.REQUEST_USER_LOGIN_SUCCESS: {
-            return {...state, user: action.payload, error: {} as IError, isLoading: false}
+            return {...state, user: action.payload, error: {} as IError, isLoading: false, isAuth: true}
         }
 
         case UserActionTypes.REQUEST_USER_REGISTRATION_SUCCESS: {
-            return {...state, user: action.payload, error: {} as IError, isLoading: false}
+            return {...state, user: action.payload, error: {} as IError, isLoading: false, isAuth: true}
         }
 
         case UserActionTypes.REQUEST_USER_REGISTRATION_ERROR: {

@@ -23,11 +23,12 @@ import {
 } from "../../actions/user";
 import {RegistrationResponse} from "../../../models/response/RegistrationResponse";
 import nookies, {destroyCookie, setCookie} from "nookies";
+import Api from "../../../utils/api";
 
 function* authorize(email: string, password: string) {
     try {
         yield put(setIsLoadingUser(true))
-        const response: AxiosResponse<AuthResponse> = yield call(userApi.login, {email, password})
+        const response: AxiosResponse<AuthResponse> = yield call(Api().user.login, {email, password})
         yield put(requestUserLoginSuccessAction(response.data.user))
         yield call(setCookie, null, "accessToken", response.data.accessToken)
     } catch (e: any) {
@@ -42,7 +43,7 @@ function* authorize(email: string, password: string) {
 function* registration({payload: {fullName, email, password}}: RequestUserRegistrationAction) {
     try {
         yield put(setIsLoadingUser(true))
-        const response: AxiosResponse<RegistrationResponse> = yield call(userApi.registration, {fullName, email, password})
+        const response: AxiosResponse<RegistrationResponse> = yield call(Api().user.registration, {fullName, email, password})
         console.log(response.data)
         yield put(requestUserRegistrationSuccessAction(response.data.user))
         yield call(setCookie, null, "accessToken", response.data.accessToken)

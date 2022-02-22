@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image'
 import Link from 'next/link'
-import {Box, IconButton, Paper, Stack, Typography} from '@mui/material';
+import {Avatar, Box, IconButton, Paper, Stack, Typography} from '@mui/material';
 import Button from '@mui/material/Button';
 import logo from "../../public/static/img/logo.svg"
 import InputSearch from "../InputSearch";
@@ -12,20 +12,20 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import styles from "./Header.module.sass"
 import AuthDialog from '../AuthDialog';
 import * as _ from "lodash";
+import useTypedSelector from "../../hooks/useTypedSelector";
 
 
 const Header = () => {
     const [visibleAuthDialog, setVisibleAuthDialog] = React.useState<boolean>(false)
+    const userData = useTypedSelector(({user}) => user)
 
     const handleCloseAuthDialog = () => {
-        console.log("close")
         setVisibleAuthDialog(false)
     }
 
     const handleOpenAuthDialog = () => {
         setVisibleAuthDialog(true)
     }
-
 
 
     return (
@@ -52,7 +52,10 @@ const Header = () => {
                     <InputSearch/>
                     <Link href={"/write"}>
                         <a>
-                            <Button className={styles.button} variant={"contained"}>Новая запись</Button>
+                            <Button
+                                className={styles.button}
+                                variant={"contained"}
+                            >Новая запись</Button>
                         </a>
                     </Link>
                 </Stack>
@@ -63,13 +66,23 @@ const Header = () => {
                     <IconButton>
                         <NotificationsOutlinedIcon/>
                     </IconButton>
-                    <Box className={styles.loginButton} onClick={handleOpenAuthDialog}>
-                        <AccountCircleOutlinedIcon/>
-                        <Typography>Войти</Typography>
-                    </Box>
+                    {
+                        userData.isAuth ? <Avatar src={userData.user.avatar}/>
+                            :
+                            <Box
+                                className={styles.loginButton}
+                                onClick={handleOpenAuthDialog}
+                            >
+                                <AccountCircleOutlinedIcon/>
+                                <Typography>Войти</Typography>
+                            </Box>
+                    }
                 </Stack>
             </Stack>
-            <AuthDialog open={visibleAuthDialog} handleClose={handleCloseAuthDialog}/>
+            <AuthDialog
+                open={visibleAuthDialog}
+                handleClose={handleCloseAuthDialog}
+            />
         </Paper>
     );
 };

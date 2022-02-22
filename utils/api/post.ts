@@ -1,13 +1,16 @@
-import axios from "axios";
-import instance from "../../http/index"
+import axios, {AxiosInstance} from "axios";
 import LoginRequest from "../../models/request/LoginRequest";
 import AuthResponse from "../../models/response/AuthResponse"
 import RegistrationRequest from "../../models/request/RegistrationRequest";
+import {OutputBlockData} from "@editorjs/editorjs/types/data-formats/output-data";
+import {CreatePostRequest} from "../../models/request/CreatePostRequest";
+import {IPost} from "../../models/IPost";
 
 const baseURL = "http://localhost:5000"
 
-export default {
-    posts: () => instance.post<AuthResponse>(`${baseURL}/auth/login`, user),
-    registration: (user: RegistrationRequest) => instance.post<RegistrationRequest>("auth/register", user),
-    checkAuthUser: () => axios.get<AuthResponse>(`${baseURL}/auth/refresh`, {withCredentials: true})
-}
+const PostApi = (instance: AxiosInstance) =>  ({
+    create: (dto: CreatePostRequest) => instance.post<IPost>(`/posts`, dto),
+    getOne: (id: number) => instance.get<IPost>(`/posts/${id}`)
+})
+
+export default PostApi

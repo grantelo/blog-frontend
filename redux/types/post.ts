@@ -1,5 +1,14 @@
+import {IUser} from "../../models/IUser";
+import IError from "../../models/IError";
+import {IPost} from "../../models/IPost";
+import {OutputData} from "@editorjs/editorjs";
+import {OutputBlockData} from "@editorjs/editorjs/types/data-formats/output-data";
+import {UserActionTypes} from "./user";
+import {CreatePostDto} from "../../../backend/src/post/dto/create-post.dto";
+import {CreatePostRequest} from "../../models/request/CreatePostRequest";
+
 export enum PostActionTypes {
-    REQUEST_POSTS = "REQUEST_POSTS",
+    SET_IS_LOADING_POST = "SET_IS_LOADING_POST",
     REQUEST_POSTS_SUCCESS = "REQUEST_POSTS_SUCCESS",
     REQUEST_POSTS_ERROR = "REQUEST_POSTS_ERROR",
     REQUEST_POST = "REQUEST_POST",
@@ -15,3 +24,49 @@ export enum PostActionTypes {
     REQUEST_DELETE_POST_SUCCESS = "REQUEST_DELETE_POST_SUCCESS",
     REQUEST_DELETE_POST_ERROR = "REQUEST_DELETE_POST_ERROR",
 }
+
+export interface PostState {
+    items: IPost[],
+    isLoading: boolean
+    error: IError | null
+}
+
+export interface RequestPostsSuccessAction {
+    type: PostActionTypes.REQUEST_POSTS_SUCCESS,
+    payload: IPost[]
+}
+
+export interface RequestPostsErrorAction {
+    type: PostActionTypes.REQUEST_POSTS_SUCCESS,
+    payload: IError
+}
+
+export interface RequestAddPostAction {
+    type: PostActionTypes.REQUEST_ADD_POST,
+    payload: CreatePostRequest
+}
+
+export interface RequestAddPostSuccessAction {
+    type: PostActionTypes.REQUEST_ADD_POST_SUCCESS,
+}
+
+export interface RequestAddPostErrorAction {
+    type: PostActionTypes.REQUEST_ADD_POST_ERROR,
+    payload: IError
+}
+
+export interface SetIsLoadingPost {
+    type: PostActionTypes.SET_IS_LOADING_POST,
+    payload: boolean
+}
+
+export type PostAction = RequestPostsSuccessAction |
+    RequestPostsErrorAction |
+    RequestAddPostAction |
+    RequestAddPostSuccessAction |
+    RequestAddPostErrorAction
+
+
+
+
+
