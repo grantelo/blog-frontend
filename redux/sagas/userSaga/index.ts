@@ -7,6 +7,7 @@ import {
     CancelledEffect,
     cancelled, takeEvery, apply
 } from "redux-saga/effects"
+import {setCookie, destroyCookie} from "nookies"
 import {Task} from '@redux-saga/types'
 import {
     UserActionTypes,
@@ -22,7 +23,6 @@ import {
     setIsLoadingUser
 } from "../../actions/user";
 import {RegistrationResponse} from "../../../models/response/RegistrationResponse";
-import nookies, {destroyCookie, setCookie} from "nookies";
 import Api from "../../../utils/api";
 
 function* authorize(email: string, password: string) {
