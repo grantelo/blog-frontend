@@ -28,10 +28,13 @@ import Api from "../../../utils/api";
 function* authorize(email: string, password: string) {
     try {
         yield put(setIsLoadingUser(true))
+        console.log("aaaaaa")
         const response: AxiosResponse<AuthResponse> = yield call(Api().user.login, {email, password})
+        console.log("dksadajasjdisjdisdishh")
         yield put(requestUserLoginSuccessAction(response.data.user))
         yield call(setCookie, null, "accessToken", response.data.accessToken)
     } catch (e: any) {
+        console.log(e)
         yield put(requestUserLoginErrorAction(e?.response?.data))
     } finally {
         if ((yield cancelled()) as CancelledEffect) {

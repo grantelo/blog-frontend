@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { FC } from 'react';
 import {Avatar, Box, Button, Divider, IconButton, Menu, MenuItem, Stack, Typography} from "@mui/material";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import {formatDistanceToNow} from 'date-fns'
+import ru from "date-fns/locale/ru"
 
 import styles from "./Comment.module.sass"
+import { IUser } from '../../models/IUser';
+import useTypedSelector from '../../hooks/useTypedSelector';
+import EditCommentForm from '../EditCommentForm';
 
-const Comment = () => {
+interface CommentProps {
+    id: number,
+    authorId: number,
+    text: string,
+    fullName: string,
+    avatar: string,
+    updatedAt: string,
+    isLoading: boolean,
+    handleDelete: (id: number) => void,
+    handleEdit: (id: number, text: string) => void
+}
+
+const Comment: FC<CommentProps> = ({id, authorId, text, fullName, avatar, updatedAt, isLoading, handleDelete, handleEdit}) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [visibleEditComment, setVisibleEditComment] = React.useState<boolean>(false)
+    const userId = useTypedSelector(({user}) => user.user.id)
+
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -14,24 +34,36 @@ const Comment = () => {
         setAnchorEl(null);
     };
 
+    const onDelete = () => {
+        handleDelete(id)
+    }
+
+    const onEdit = (text: string) => {
+        handleEdit(id, text)
+    }
+
+    const toggleVisibleEditComment = () => {
+        setVisibleEditComment(visible => !visible)
+    }
+
     return (
         <Box className={styles.box}>
             <Stack
                 direction={"row"}
                 spacing={1}
             >
-                <Avatar src={"https://leonardo.osnova.io/9a07aef4-a8c3-388d-4661-08bae93feb0e/-/scale_crop/64x64/-/format/webp/"}/>
+                <Avatar src={avatar}/>
                 <Box>
-                    <Typography>{"Bob Smith"}</Typography>
-                    <Typography>2 часа</Typography>
+                    <Typography>{fullName}</Typography>
+                    <Typography>{formatDistanceToNow(new Date(updatedAt), {locale: ru})}</Typography>
                 </Box>
             </Stack>
-            <Typography>
-                -20 сошиал линк. Товарищ Xi Jinping
-            </Typography>
-            <Stack direction={"row"}>
-                <Button className={styles.button} variant={"text"}>Ответить</Button>
-                <IconButton>
+            <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
+                {/*<Button className={styles.button} variant={"text"}>Ответить</Button>*/}
+                <Typography>
+                    {text}
+                </Typography>
+                <IconButton onClick={handleClick}>
                     <MoreHorizIcon/>
                 </IconButton>
                 <Menu
@@ -41,11 +73,12 @@ const Comment = () => {
                     onClose={handleClose}
                     keepMounted
                 >
+                    {userId === authorId && <MenuItem onClick={toggleVisibleEditComment}>Редактировать</MenuItem>}
                     <MenuItem onClick={handleClose}>Удалить</MenuItem>
-                    <MenuItem onClick={handleClose}>Редактировать</MenuItem>
                 </Menu>
             </Stack>
             <Divider />
+            {visibleEditComment && <EditCommentForm initialText={text} onEditComment={onEdit} isSubmiting={isLoading}/>}
         </Box>
     );
 };

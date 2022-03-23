@@ -50,6 +50,7 @@ MyApp.getInitialProps = wrapper.getInitialAppProps((store: Store) => async (cont
     } catch (e) {
         console.log("error in getinitialprops")
         console.log(e)
+        console.log("end")
     }
 
     const pageProps = {

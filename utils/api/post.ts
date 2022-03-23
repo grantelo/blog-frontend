@@ -6,9 +6,8 @@ import {OutputBlockData} from "@editorjs/editorjs/types/data-formats/output-data
 import {CreatePostRequest} from "../../models/request/CreatePostRequest";
 import {IPost} from "../../models/IPost";
 
-const baseURL = "http://localhost:5000"
-
 const PostApi = (instance: AxiosInstance) =>  ({
+    getAll: () => instance.get<IPost[]>("/posts"),
     create: (dto: CreatePostRequest) => instance.post<IPost>(`/posts`, dto),
     getOne: (id: number) => instance.get<IPost>(`/posts/${id}`)
 })
