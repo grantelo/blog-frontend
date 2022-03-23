@@ -30,6 +30,7 @@ const LoginForm: FC<LoginFormProps> = ({requestUserLoginAction, handleClose, onO
     });
 
     const onSubmit = async (payload: IFormInputs) => {
+        console.log("dsdas")
         requestUserLoginAction(payload)
     }
 

@@ -15,7 +15,7 @@ import {IPost} from "../../models/IPost";
 
 
 const Editor = dynamic(
-    () => import("../Editor"),
+    () => import("../Editor/index"),
     {ssr: false}
 )
 

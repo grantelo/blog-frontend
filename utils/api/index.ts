@@ -3,6 +3,7 @@ import nookies from "nookies";
 import {GetServerSideProps, GetServerSidePropsContext, NextPageContext} from "next";
 import UserApi from "./user";
 import PostApi from "./post";
+import CommentApi from "./comment";
 import AuthResponse from "../../models/response/AuthResponse";
 import {requestUserLogoutAction} from "../../redux/actions/user";
 import {store} from "../../redux/store";
@@ -11,6 +12,7 @@ import {json} from "stream/consumers";
 export type ApiReturnType = {
     user: ReturnType<typeof UserApi>,
     post: ReturnType<typeof PostApi>
+    comment: ReturnType<typeof CommentApi>
 }
 
 export const Api = (ctx?: NextPageContext | GetServerSidePropsContext): ApiReturnType => {
@@ -49,7 +51,7 @@ export const Api = (ctx?: NextPageContext | GetServerSidePropsContext): ApiRetur
                         Cookie: `refreshToken=${cookies.refreshToken}`
                     }
                 })
-            nookies.set(ctx ?? null, "accessToken", response.data.accessToken)
+            nookies.set(ctx ?? null, "accessToken", response.data.accessToken, {maxAge: 1000 * 60 * 15})
             originalRequest.headers.Authorization = 'Bearer ' + response.data.accessToken
             return instance.request(originalRequest)
         }
@@ -64,6 +66,7 @@ export const Api = (ctx?: NextPageContext | GetServerSidePropsContext): ApiRetur
     const apis = {
         user: UserApi,
         post: PostApi,
+        comment: CommentApi
     };
 
     return Object.entries(apis).reduce((prev, [key, f]) => {

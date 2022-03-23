@@ -17,6 +17,12 @@ const post = (state: PostState = initialState, action: AnyAction): PostState => 
         case PostActionTypes.SET_IS_LOADING_POST:
             return {...state, isLoading: action.payload}
 
+        case PostActionTypes.REQUEST_POSTS_SUCCESS:
+            return {...state, items: action.payload, error: null, isLoading: false}
+
+        case PostActionTypes.REQUEST_POSTS_ERROR:
+            return {...state, error: action.paylaod, isLoading: false}
+
         case PostActionTypes.REQUEST_ADD_POST_SUCCESS:
             return {...state, isLoading: false}
 

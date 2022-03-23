@@ -2,7 +2,6 @@ import React, {FC} from 'react';
 import EditorJS, {API, BlockAPI, OutputData} from "@editorjs/editorjs";
 import ImageTool from '@editorjs/image';
 import Header from "@editorjs/header"
-import Checklist from "@editorjs/checklist"
 import List from '@editorjs/list';
 import {Box} from "@mui/system";
 import insert from "react-hook-form/dist/utils/insert";
@@ -21,15 +20,12 @@ const Editor: FC<EditorProps> = ({onChange}) => {
                     class: ImageTool,
                     config: {
                         endpoints: {
-                            byFile: "http://localhost:5000/post/upload-image"
-                        }
+                            byFile: "http://localhost:5000/posts/upload-image"
+                        },
+                        defaultElements: null
                     }
                 },
                 header: Header,
-                checklist: {
-                    class: Checklist,
-                    inlineToolbar: true,
-                },
                 list: {
                     class: List,
                     inlineToolbar: true,
