@@ -7,9 +7,10 @@ interface AddCommentFormProps {
     initialText: string,
     onEditComment: (text: string) => void,
     isSubmiting: boolean
+    handleClose: () => void;
 }
 
-const EditCommentForm: FC<AddCommentFormProps> = ({initialText, onEditComment, isSubmiting}) => {
+const EditCommentForm: FC<AddCommentFormProps> = ({initialText, onEditComment, isSubmiting, handleClose}) => {
     const [text, setText] = React.useState<string>(initialText)
     const [firstEdit, setFirstEdit] = React.useState<boolean>(false)
 
@@ -34,13 +35,13 @@ const EditCommentForm: FC<AddCommentFormProps> = ({initialText, onEditComment, i
             <Button
                 className={styles.button}
                 onClick={onEdit}
-                disabled={firstEdit || isSubmiting || !text}
+                disabled={!firstEdit || isSubmiting || !text}
                 variant={"contained"}
                 color={"primary"}
             >Редактировать</Button>
             <Button
                 className={styles.button}
-                onClick={onEdit}
+                onClick={handleClose}
                 variant={"contained"}
                 color={"primary"}
             >Отмена</Button>
