@@ -13,10 +13,8 @@ import "../styles/globals.sass";
 import { Store } from "redux";
 import Api from "../utils/api";
 import { setUserAction } from "../redux/actions/user";
-import { useRouter } from "next/router";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  useRouter();
   return (
     <>
       <Head>
@@ -44,7 +42,6 @@ MyApp.getInitialProps = wrapper.getInitialAppProps(
   (store: Store) => async (context) => {
     try {
       const response = await Api(context.ctx).user.getMe();
-
       store.dispatch(setUserAction(response.data));
     } catch (e) {
       console.log("error in getinitialprops");

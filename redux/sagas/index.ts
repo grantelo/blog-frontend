@@ -1,5 +1,5 @@
 import { all, spawn } from "redux-saga/effects";
-import { loginSaga, registrationSaga } from "./userSaga";
+import { loginSaga, registrationSaga, userUpdateProfileSaga } from "./userSaga";
 import { initializeAppSaga } from "./app";
 import { addPostSaga } from "./postSaga";
 import {
@@ -17,6 +17,7 @@ export default function* rootSaga() {
     addCommentSaga,
     updateCommentSaga,
     deleteCommentSaga,
+    userUpdateProfileSaga,
   ];
 
   yield all(sagas.map((saga) => spawn(saga)));
