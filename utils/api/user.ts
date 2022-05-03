@@ -4,13 +4,13 @@ import AuthResponse from "../../models/response/AuthResponse";
 import RegistrationRequest from "../../models/request/RegistrationRequest";
 import { IUser } from "../../models/IUser";
 import { ChangePasswordRequest } from "../../models/request/ChangePasswordRequest";
-
-const baseURL = "http://localhost:5000";
+import { UpdateUserProfileRequest } from "../../models/request/UpdateProfileRequest";
+import { baseURL } from "./index";
 
 const UserApi = (instance: AxiosInstance) => ({
-  getMe: () => instance.get<IUser>("users/me"),
+  getMe: () => instance.get<IUser>("/users/me"),
   login: (user: LoginRequest) =>
-    instance.post<AuthResponse>(`${baseURL}/auth/login`, user),
+    instance.post<AuthResponse>("/auth/login", user),
   registration: (user: RegistrationRequest) =>
     instance.post<RegistrationRequest>("auth/register", user),
   checkAuthUser: () =>
@@ -22,6 +22,8 @@ const UserApi = (instance: AxiosInstance) => ({
       `${baseURL}/auth/change-password?token=${token}`,
       dto
     ),
+  updateProfile: (dto: UpdateUserProfileRequest) =>
+    instance.patch<IUser>("/users", dto),
 });
 
 export default UserApi;

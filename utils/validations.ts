@@ -36,3 +36,7 @@ export const ChangePasswordFormSchema = yup.object({
     .min(8, "Пароль должен быть не менее 8 символов")
     .oneOf([yup.ref("newPassword")], "Пароли должны совпадать"),
 });
+
+export const UpdateProfileFormSchema = yup.object({
+  fullName: yup.string().required(),
+});

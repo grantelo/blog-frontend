@@ -1,81 +1,98 @@
 import axios from "axios";
 import nookies from "nookies";
-import {GetServerSideProps, GetServerSidePropsContext, NextPageContext} from "next";
+import { GetServerSidePropsContext, NextPageContext } from "next";
 import UserApi from "./user";
 import PostApi from "./post";
 import CommentApi from "./comment";
 import AuthResponse from "../../models/response/AuthResponse";
-import {requestUserLogoutAction} from "../../redux/actions/user";
-import {store} from "../../redux/store";
-import {json} from "stream/consumers";
+import FileApi from "./file";
 
 export type ApiReturnType = {
-    user: ReturnType<typeof UserApi>,
-    post: ReturnType<typeof PostApi>
-    comment: ReturnType<typeof CommentApi>
-}
+  user: ReturnType<typeof UserApi>;
+  post: ReturnType<typeof PostApi>;
+  comment: ReturnType<typeof CommentApi>;
+  file: ReturnType<typeof FileApi>;
+};
 
-export const Api = (ctx?: NextPageContext | GetServerSidePropsContext): ApiReturnType => {
-    const cookies = ctx ? nookies.get(ctx) : nookies.get()
-    const accessToken = cookies.accessToken
+export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
-    //console.log(accessToken)
+export const Api = (
+  ctx?: NextPageContext | GetServerSidePropsContext
+): ApiReturnType => {
+  const cookies = ctx ? nookies.get(ctx) : nookies.get();
+  const accessToken = cookies.accessToken;
 
-    const instance = axios.create({
-        withCredentials: true,
-        baseURL: "http://localhost:5000/",
-        headers: {
-            Authorization: 'Bearer ' + accessToken
-        }
-    })
+  console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+  console.log(cookies);
 
-    // instance.interceptors.request.use(config => {
-    //     if (typeof window === "undefined") return config
-    //
-    //     config.headers.Authorization = `Bearer ${localStorage.getItem("accessToken")}`
-    //     return config
-    // })
+  //console.log(accessToken)
 
-    instance.interceptors.response.use(config => {
-        return config
-    }, async error => {
-        const originalRequest = error.config
+  const instance = axios.create({
+    withCredentials: true,
+    baseURL,
+    headers: {
+      Authorization: "Bearer " + accessToken,
+    },
+  });
 
-        if (error.response.status === 401 && !error?.config._isRetry) {
-            originalRequest._isRetry = true
-            const response = await axios.get<AuthResponse>(
-                "http://localhost:5000/auth/refresh",
-                {
-                    withCredentials: true,
-                    headers: {
-                        Cookie: `refreshToken=${cookies.refreshToken}`
-                    }
-                })
-            nookies.set(ctx ?? null, "accessToken", response.data.accessToken, {maxAge: 1000 * 60 * 15})
-            originalRequest.headers.Authorization = 'Bearer ' + response.data.accessToken
-            return instance.request(originalRequest)
-        }
+  // instance.interceptors.request.use(config => {
+  //     if (typeof window === "undefined") return config
+  //
+  //     config.headers.Authorization = `Bearer ${localStorage.getItem("accessToken")}`
+  //     return config
+  // })
 
-        // if (error.response.status === 401) {
-        //     store.dispatch(requestUserLogoutAction())
-        // }
+  instance.interceptors.response.use(
+    (config) => {
+      return config;
+    },
+    async (error) => {
+      const originalRequest = error.config;
 
-        throw error.config
-    })
+      if (error.response.status === 401 && !error?.config._isRetry) {
+        originalRequest._isRetry = true;
+        const response = await axios.get<AuthResponse>(
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+          {
+            withCredentials: true,
+            headers: {
+              Cookie: `refreshToken=${cookies.refreshToken}`,
+            },
+          }
+        );
+        console.log(response);
+        nookies.set(ctx ?? null, "accessToken", response.data.accessToken, {
+          maxAge: 1000 * 60 * 15,
+        });
+        nookies.set(ctx ?? null, "refreshToken", response.data.refreshToken, {
+          maxAge: 1000 * 60 * 60 * 24 * 30,
+        });
+        originalRequest.headers.Authorization =
+          "Bearer " + response.data.accessToken;
+        return instance.request(originalRequest);
+      }
 
-    const apis = {
-        user: UserApi,
-        post: PostApi,
-        comment: CommentApi
+      // if (error.response.status === 401) {
+      //     store.dispatch(requestUserLogoutAction())
+      // }
+
+      throw error.config;
+    }
+  );
+
+  const apis = {
+    user: UserApi,
+    post: PostApi,
+    comment: CommentApi,
+    file: FileApi,
+  };
+
+  return Object.entries(apis).reduce((prev, [key, f]) => {
+    return {
+      ...prev,
+      [key]: f(instance),
     };
+  }, {} as ApiReturnType);
+};
 
-    return Object.entries(apis).reduce((prev, [key, f]) => {
-        return {
-            ...prev,
-            [key]: f(instance),
-        };
-    }, {} as ApiReturnType)
-}
-
-export default Api
-
+export default Api;
