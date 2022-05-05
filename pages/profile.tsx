@@ -23,6 +23,8 @@ const Profile: NextPage<ProfileProps> = ({user}) => {
     dispatch
   );
 
+  console.log(user)
+
   return (
     <ProfileForm
       requestUserUpdateProfile={requestUserUpdateProfile}
