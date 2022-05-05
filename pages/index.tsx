@@ -30,6 +30,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     try {
       const response = await Api(context).post.getAll();
+      console.log("bbbbbbbbbbbbbb")
+      console.log(response.data)
 
       store.dispatch(requestPostsSuccess(response.data));
 

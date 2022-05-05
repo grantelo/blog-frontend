@@ -2,6 +2,7 @@ import React from "react";
 import Head from "next/head";
 import type { AppProps } from "next/app";
 import App from "next/app";
+import nookies from "nookies";
 import { END } from "redux-saga";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
@@ -42,6 +43,7 @@ MyApp.getInitialProps = wrapper.getInitialAppProps(
   (store: Store) => async (context) => {
     try {
       const response = await Api(context.ctx).user.getMe();
+      console.log("ccccc")
       store.dispatch(setUserAction(response.data));
     } catch (e) {
       console.log("error in getinitialprops");

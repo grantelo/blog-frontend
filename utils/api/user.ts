@@ -12,7 +12,7 @@ const UserApi = (instance: AxiosInstance) => ({
   login: (user: LoginRequest) =>
     instance.post<AuthResponse>("/auth/login", user),
   registration: (user: RegistrationRequest) =>
-    instance.post<RegistrationRequest>("auth/register", user),
+    instance.post<RegistrationRequest>("/auth/register", user),
   checkAuthUser: () =>
     axios.get<AuthResponse>(`${baseURL}/auth/refresh`, {
       withCredentials: true,
@@ -24,6 +24,7 @@ const UserApi = (instance: AxiosInstance) => ({
     ),
   updateProfile: (dto: UpdateUserProfileRequest) =>
     instance.patch<IUser>("/users", dto),
+  profile: () => instance.get<IUser>('/users/profile')
 });
 
 export default UserApi;

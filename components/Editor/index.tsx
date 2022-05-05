@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import EditorJS, { API, BlockAPI, OutputData } from "@editorjs/editorjs";
+import Box from '@mui/material/Box';
 import ImageTool from "@editorjs/image";
 import Header from "@editorjs/header";
 import List from "@editorjs/list";

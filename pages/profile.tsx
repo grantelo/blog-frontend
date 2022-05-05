@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import {GetServerSideProps, NextPage } from "next";
 import useTypedSelector from "../hooks/useTypedSelector";
 import { IUser } from "../models/IUser";
 import ProfileForm from "../components/ProfileForm";
@@ -6,9 +6,14 @@ import IError from "../models/IError";
 import { useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as UserActionCreators from "../redux/actions/user";
+import { wrapper } from "../redux/store";
+import Api from "../utils/api";
 
-const Profile: NextPage = () => {
-  const user = useTypedSelector<IUser>(({ user }) => user.user);
+interface ProfileProps {
+  user: IUser
+}
+
+const Profile: NextPage<ProfileProps> = ({user}) => {
   const isLoading = useTypedSelector<boolean>(({ user }) => user.isLoading);
   const error = useTypedSelector<IError>(({ user }) => user.error);
   const dispatch = useDispatch();
@@ -16,6 +21,8 @@ const Profile: NextPage = () => {
     UserActionCreators,
     dispatch
   );
+
+  console.log(user)
 
   return (
     <ProfileForm
@@ -28,10 +35,26 @@ const Profile: NextPage = () => {
   );
 };
 
-export default Profile;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  try {
+    const response = await Api(ctx).user.profile()
 
-// export const getServerSideProps = wrapper.getServerSideProps(store => async (context: NextPageContext) => {
-//
-//
-//
-// }
+    return {
+      props: {
+        user: response.data
+      }
+    }
+  } catch (e) {
+    console.log("nnnnnnnnnnn")
+    console.log(e)
+
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false
+      }
+    }
+  }
+}
+
+export default Profile;

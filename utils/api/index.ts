@@ -1,5 +1,6 @@
 import axios from "axios";
-import nookies from "nookies";
+import nookies  from "nookies";
+import setCookie from 'set-cookie-parser'
 import { GetServerSidePropsContext, NextPageContext } from "next";
 import UserApi from "./user";
 import PostApi from "./post";
@@ -20,10 +21,12 @@ export const Api = (
   ctx?: NextPageContext | GetServerSidePropsContext
 ): ApiReturnType => {
   const cookies = ctx ? nookies.get(ctx) : nookies.get();
-  const accessToken = cookies.accessToken;
+  const responseAccessToken = setCookie.parse(ctx?.res?.getHeader('Set-Cookie') as string[], {map: true})?.accessToken?.value
+  const accessToken = responseAccessToken ?? cookies.accessToken;
 
-  console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
-  console.log(cookies);
+  console.log("testing cookies")
+  // console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+  // console.log(cookies);
 
   //console.log(accessToken)
 
@@ -48,7 +51,7 @@ export const Api = (
     },
     async (error) => {
       const originalRequest = error.config;
-
+      console.log(error)
       if (error.response.status === 401 && !error?.config._isRetry) {
         originalRequest._isRetry = true;
         const response = await axios.get<AuthResponse>(
@@ -60,6 +63,7 @@ export const Api = (
             },
           }
         );
+        console.log("response for refresh")
         console.log(response);
         nookies.set(ctx ?? null, "accessToken", response.data.accessToken, {
           maxAge: 1000 * 60 * 15,
@@ -67,6 +71,8 @@ export const Api = (
         nookies.set(ctx ?? null, "refreshToken", response.data.refreshToken, {
           maxAge: 1000 * 60 * 60 * 24 * 30,
         });
+        console.log("context after refresh:")
+        console.log(ctx)
         originalRequest.headers.Authorization =
           "Bearer " + response.data.accessToken;
         return instance.request(originalRequest);

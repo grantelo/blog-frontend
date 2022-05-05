@@ -8,7 +8,7 @@ interface ListProps<T> {
     direction?: ResponsiveStyleValue<'row' | 'row-reverse' | 'column' | 'column-reverse'>,
     justifyContent?: ResponsiveStyleValue<'flex-start' | 'flex-end' | 'center' | 'space-between' | "space-around" | "space-evenly">
     alignItems?: ResponsiveStyleValue<'flex-start' | 'flex-end' | 'center' | 'strech' | "baseline">,
-    spacing?: number
+    spacing?: number,
 }
 
 
