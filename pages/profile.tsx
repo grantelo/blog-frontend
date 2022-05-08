@@ -13,6 +13,7 @@ interface ProfileProps {
   user: IUser
 }
 
+
 const Profile: NextPage<ProfileProps> = ({user}) => {
   const isLoading = useTypedSelector<boolean>(({ user }) => user.isLoading);
   const error = useTypedSelector<IError>(({ user }) => user.error);
