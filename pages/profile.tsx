@@ -1,9 +1,9 @@
 import {GetServerSideProps, NextPage } from "next";
 import useTypedSelector from "../hooks/useTypedSelector";
-import { IUser } from "../models/IUser";
+import {IUser } from "../models/IUser";
 import ProfileForm from "../components/ProfileForm";
 import IError from "../models/IError";
-import { useDispatch } from "react-redux";
+import {  useDispatch} from "react-redux";
 import { bindActionCreators } from "redux";
 import * as UserActionCreators from "../redux/actions/user";
 import { wrapper } from "../redux/store";

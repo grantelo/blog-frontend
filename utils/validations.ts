@@ -17,6 +17,11 @@ export const RegistrationFormSchema = yup
   })
   .concat(LoginFormSchema);
 
+  export const ForgotPasswordFormSchema = yup
+  .object({
+    email: yup.string().required("Email обязателен").email(),
+  })
+
 export const ChangePasswordFormSchema = yup.object({
   password: yup
     .string()
@@ -30,6 +35,18 @@ export const ChangePasswordFormSchema = yup.object({
       [yup.ref("password")],
       "Новый пароль должен отличаться от старого"
     ),
+  repeatNewPassword: yup
+    .string()
+    .required("Требуется новый пароль")
+    .min(8, "Пароль должен быть не менее 8 символов")
+    .oneOf([yup.ref("newPassword")], "Пароли должны совпадать"),
+});
+
+export const ResetPasswordFormSchema = yup.object({
+  newPassword: yup
+    .string()
+    .required("Требуется новый пароль")
+    .min(8, "Пароль должен быть не менее 8 символов"),
   repeatNewPassword: yup
     .string()
     .required("Требуется новый пароль")

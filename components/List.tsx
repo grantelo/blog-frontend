@@ -1,6 +1,6 @@
 import React from 'react';
 import {ResponsiveStyleValue} from '@mui/system';
-import {Stack} from "@mui/material";
+import {Stack  } from "@mui/material";
 
 interface ListProps<T> {
     items: any[],
