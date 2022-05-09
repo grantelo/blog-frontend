@@ -7,12 +7,16 @@ import PostApi from "./post";
 import CommentApi from "./comment";
 import AuthResponse from "../../models/response/AuthResponse";
 import FileApi from "./file";
+import DialogApi from "./dialog";
+import MessageApi from "./message";
 
 export type ApiReturnType = {
   user: ReturnType<typeof UserApi>;
   post: ReturnType<typeof PostApi>;
   comment: ReturnType<typeof CommentApi>;
   file: ReturnType<typeof FileApi>;
+  dialog: ReturnType<typeof DialogApi>,
+  message: ReturnType<typeof MessageApi>
 };
 
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
@@ -91,6 +95,8 @@ export const Api = (
     post: PostApi,
     comment: CommentApi,
     file: FileApi,
+    dialog: DialogApi,
+    message: MessageApi
   };
 
   return Object.entries(apis).reduce((prev, [key, f]) => {
