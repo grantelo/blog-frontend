@@ -1,3 +1,4 @@
+import { HYDRATE } from "next-redux-wrapper";
 import { AnyAction } from "redux"
 import { MessageActionTypes, MessageState } from "../types/message"
 
@@ -9,6 +10,9 @@ const initialState: MessageState = {
 
 export const messageReducer = (state = initialState, action: AnyAction): MessageState => {
     switch (action.type) {
+        case HYDRATE:
+            return { ...state, ...action.payload.message };
+
         case MessageActionTypes.REQUEST_MESSAGES_SUCCESS:
             return {
                 ...state,

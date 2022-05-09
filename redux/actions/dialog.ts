@@ -1,9 +1,21 @@
+import { IDialog } from "../../models/IDialog";
+import IError from "../../models/IError";
 import { IMessage } from "../../models/IMessage";
 import { CreateDialogRequest } from "../../models/request/CreateDialogRequest";
-import { DialogActionTypes, RequestCreateDialogAction, RequestDeleteDialogAction, DeleteMessageAction, RequestDialogsAction, SetCurrentDialogAction, SetReadedStatusLastMessageAction, SetIsLoadingDialogAction, SetIsOnlineDialogAction } from "../types/dialog";
+import { DialogActionTypes, RequestCreateDialogAction, RequestDeleteDialogAction, DeleteMessageAction, RequestDialogsAction, SetCurrentDialogAction, SetReadedStatusLastMessageAction, SetIsLoadingDialogAction, SetIsOnlineDialogAction, RequestDialogsSuccessAction, RequestDialogsErrorAction } from "../types/dialog";
 
 export const requestDialogs = (): RequestDialogsAction => ({
     type: DialogActionTypes.REQUEST_DIALOGS,
+})
+
+export const requestDialogsSuccess = (payload: IDialog[]): RequestDialogsSuccessAction => ({
+    type: DialogActionTypes.REQUEST_DIALOGS_SUCCESS,
+    payload
+})
+
+export const requestDialogsError = (payload: IError): RequestDialogsErrorAction => ({
+    type: DialogActionTypes.REQUEST_DIALOGS_ERROR,
+    payload
 })
 
 export const requestDeleteDialog = (payload: number): RequestDeleteDialogAction => ({

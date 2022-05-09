@@ -24,7 +24,7 @@ export enum DialogActionTypes {
 
 export interface DialogState {
     items: IDialog[],
-    currentDialogId: string
+    currentDialogId: number
     isLoading: boolean,
     error: IError | null
 }

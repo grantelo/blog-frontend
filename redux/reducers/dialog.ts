@@ -5,7 +5,7 @@ import {MessageActions, MessageActionTypes} from "../types/message";
 
 const initialState : DialogState = {
     items: [],
-    currentDialogId: window.location.pathname.split("dialogs/")[1],
+    currentDialogId: +window.location.pathname.split("dialogs/")[1],
     isLoading: false,
     error: null
 }
