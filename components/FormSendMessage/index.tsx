@@ -1,10 +1,11 @@
 import { Box, IconButton } from "@mui/material";
 import { makeStyles } from "@mui/material/styles";
 import classNames from "classnames";
-import React, { ChangeEvent, SyntheticEvent, useRef, useState } from "react";
+import React, { ChangeEvent, FC, SyntheticEvent, useRef, useState } from "react";
 import {Socket} from "socket.io-client"
 import SendIcon from "@mui/icons-material/Send";
 import CustomInput from "../CustomInput";
+import { RequestSendMessageAction } from "../../redux/types/message";
 
 const useStyle = makeStyles(theme => ({
     form: {
@@ -42,26 +43,22 @@ const useStyle = makeStyles(theme => ({
 }))
 
 interface FormSendMessageProps {
-    fetchSendMessage: (text: string, attachments?: string[]) => AppThunk<MessageActions | DialogActions>
+    handleSendMessage: (text: string) => RequestSendMessageAction,
     refDiv: React.RefObject<HTMLDivElement>;
     socket: Socket | null,
     //setAlert: ({text, severity}: SetAlertPayload) => void
 }
 
-const FormSendMessage: FC<FormSendMessageProps> = ({fetchSendMessage, refDiv, socket, setAlert}) => {
+const FormSendMessage: FC<FormSendMessageProps> = ({handleSendMessage, refDiv, socket}) => {
     const classes = useStyle()
     const [value, setValue] = useState<string>("")
-    const [isRecord, setIsRecord] = useState<boolean>(false)
-    const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null)
-    const [attachments, setAttachments] = useState<File[]>([])
     const emojiRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null)
-    const refInputFile: React.RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null)
     let range: Range = new Range();
 
     const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
         e.preventDefault()
 
-        fetchSendMessage(value);
+        handleSendMessage(value);
 
         refDiv.current!.innerText = ""
     }
@@ -111,7 +108,7 @@ const FormSendMessage: FC<FormSendMessageProps> = ({fetchSendMessage, refDiv, so
                 />
                 <Box className={classes.iconBox}>
                     <IconButton
-                        className={classNames([classes.icon, classes.sendIconButton], {[classes.hiddenIcon]: !value && !attachments.length})}
+                        className={classNames([classes.icon, classes.sendIconButton])}
                         type={"submit"}
                     >
                         <SendIcon fontSize={"large"}/>

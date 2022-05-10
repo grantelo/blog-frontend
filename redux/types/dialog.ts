@@ -3,6 +3,7 @@ import IError from "../../models/IError";
 import {IMessage} from "../../models/IMessage";
 import { CreateDialogRequest } from "../../models/request/CreateDialogRequest";
 
+
 export enum DialogActionTypes {
     REQUEST_DIALOGS = "REQUEST_DIALOGS",
     REQUEST_DIALOGS_SUCCESS = "REQUEST_DIALOGS_SUCCESS",
@@ -19,7 +20,8 @@ export enum DialogActionTypes {
     // REQUEST_DELETE_MESSAGE_ERROR = "REQUEST_DELETE_MESSAGE_ERROR",
     REQUEST_CREATE_DIALOG = "REQUEST_CREATE_DIALOG",
     REQUEST_CREATE_DIALOG_SUCCESS = "REQUEST_CREATE_DIALOG_SUCCESS",
-    REQUEST_CREATE_DIALOG_ERROR = "REQUEST_CREATE_DIALOG_ERROR"
+    REQUEST_CREATE_DIALOG_ERROR = "REQUEST_CREATE_DIALOG_ERROR",
+    REQUEST_DELETE_MESSAGE = "REQUEST_DELETE_MESSAGE"
 }
 
 export interface DialogState {
@@ -50,11 +52,12 @@ export interface RequestDeleteDialogAction {
 
 export interface RequestDeleteDialogSuccessAction {
     type: DialogActionTypes.REQUEST_DELETE_DIALOG_SUCCESS,
+    payload: number
 }
 
 export interface RequestDeleteDialogErrorAction {
     type: DialogActionTypes.REQUEST_DELETE_DIALOG_ERROR,
-    paylod: IError
+    payload: IError
 }
 
 export interface SetIsLoadingDialogAction {
@@ -83,7 +86,7 @@ export interface SetReadedStatusLastMessageAction {
 export interface DeleteMessageAction {
     type: DialogActionTypes.DELETE_MESSAGE,
     payload: {
-        messageId: number,
+        message: IMessage,
         dialogId: number
     }
 }

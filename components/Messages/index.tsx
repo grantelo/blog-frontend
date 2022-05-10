@@ -2,6 +2,7 @@ import { Box, Container, makeStyles } from "@mui/material";
 import { FC } from "react";
 import { IMessage } from "../../models/IMessage";
 import { IUser } from "../../models/IUser";
+import { RequestDeleteMessageAction } from "../../redux/types/message";
 import Message from "../Message";
 
 const useStyle = makeStyles(() => ({
@@ -19,7 +20,7 @@ interface MessagesProps {
     user: IUser,
     items: IMessage[],
     isTyping?: boolean,
-    handleDeleteMessage: (messageId: string) => void
+    handleDeleteMessage: (messageId: number) => RequestDeleteMessageAction
 }
 
 const Messages: FC<MessagesProps> = ({user, items, isTyping, handleDeleteMessage}) => {

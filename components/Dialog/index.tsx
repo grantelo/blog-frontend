@@ -1,4 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
+import { bindActionCreators } from "redux";
 import { Box, Container, makeStyles, Typography } from "@mui/material";
 import {Socket} from "socket.io-client";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -10,6 +11,10 @@ import classNames from "classnames";
 import Messages from "../Messages";
 import FormSendMessage from "../FormSendMessage";
 import Status from "../Status";
+import * as MessageActionCreators from "../../redux/actions/message"
+import * as DialogActionCreators from "../../redux/actions/dialog"
+import { useDispatch } from "react-redux";
+
 
 
 const useStyle = makeStyles(theme => ({
@@ -54,53 +59,57 @@ interface DialogProps {
     user: IUser,
     currentDialog: IDialog,
     socket: Socket | null,
-    handleLogoutUser: () => void
 }
 
-const Dialog: FC<DialogProps> = ({user, currentDialog, socket, handleLogoutUser}) => {
+const Dialog: FC<DialogProps> = ({user, currentDialog, socket}) => {
     const classes = useStyle()
     const [isTyping, setIsTyping] = useState<boolean>(false)
+    const dispatch = useDispatch()
     const {
-        fetchMessages,
-        fetchSendMessage,
-        addMessage,
-        fetchDeleteMessage,
-        fetchDeleteDialog,
-        setReadedStatusLastMessages,
+        requestDeleteDialog,
         setReadedStatusLastMessage,
-        setAlertDialog,
+        addMessage,
         setIsOnline,
-        setAlert
-    } = useActions()
+        requestMessages,
+        requestSendMessage,
+        requestDeleteMessage,
+        setReadedStatusLastMessages,
+    } = bindActionCreators(Object.assign({}, DialogActionCreators, MessageActionCreators), dispatch)
+    
+    // const {
+    //     setAlertDialog,
+    //     setIsOnline,
+    //     setAlert
+    // } = useActions()
     const isLoading: boolean = useTypedSelector<boolean>(({message}) => message.isLoading)
     const items: IMessage[] = useTypedSelector<IMessage[]>(({message}) => message.items)
     let typingTimeoutId: number | null = null
-    const partner = user?.id === currentDialog?.author?._id ? currentDialog?.partner : currentDialog?.author
+    const partner = currentDialog.users.find(item => item.id !== user.id)!
     const refDiv: React.RefObject<HTMLDivElement> = useRef(null)
 
     useEffect(() => {
         socket?.on("dialog:typing", toggleIsTyping)
-        socket?.on("user:online", (userId: string) => {
+        socket?.on("user:online", (userId: number) => {
             console.log("onLine")
             setIsOnline(userId, true)
         })
-        socket?.on("user:disconnected", (userId: string) => {
+        socket?.on("user:disconnected", (userId: number) => {
             setIsOnline(userId, false)
         })
     }, [])
 
     useEffect(() => {
         if (currentDialog?.id)
-            fetchMessages()
+            requestMessages()
 
         socket?.on("message:created", handleAddMessage)
-        socket?.on("messages:readed", (dialogId: string, userId: string) => {
-            if (+userId === user.id) return
+        socket?.on("messages:readed", (dialogId: number, userId: number) => {
+            if (userId === user.id) return
 
             setReadedStatusLastMessage(dialogId)
             setReadedStatusLastMessages(dialogId)
         })
-        socket?.on("message:readed", (dialogId: string) => {
+        socket?.on("message:readed", (dialogId: number) => {
             setReadedStatusLastMessages(dialogId)
         })
 
@@ -109,7 +118,7 @@ const Dialog: FC<DialogProps> = ({user, currentDialog, socket, handleLogoutUser}
             socket?.off("messages:readed")
             socket?.off("message:readed")
         }
-    }, [currentDialog?._id])
+    }, [currentDialog?.id])
 
     const handleAddMessage = (message: IMessage) => {
         if (message.user.id === user.id) return
@@ -118,7 +127,7 @@ const Dialog: FC<DialogProps> = ({user, currentDialog, socket, handleLogoutUser}
             addMessage(message)
 
             if (message.user.id !== user.id)
-                socket?.emit("message:read", currentDialog._d)
+                socket?.emit("message:read", currentDialog.id)
         }
     }
 
@@ -144,11 +153,10 @@ const Dialog: FC<DialogProps> = ({user, currentDialog, socket, handleLogoutUser}
     return (
         <Box className={classes.root}>
             <Status
-                name={partner?.name}
-                isOnline={partner?.isOnline}
-                handleDeleteDialog={fetchDeleteDialog}
+                name={partner.fullName}
+                isOnline={partner.isOnline}
+                handleDeleteDialog={requestDeleteDialog}
                 currentDialog={currentDialog}
-                handleLogoutUser={handleLogoutUser}
             />
             <Container className={classes.contanier}>
                 <Box className={classNames(classes.messagesBox, {[classes.emptyDialog]: !currentDialog})}>
@@ -172,13 +180,13 @@ const Dialog: FC<DialogProps> = ({user, currentDialog, socket, handleLogoutUser}
                                 user={user}
                                 items={items}
                                 isTyping={isTyping}
-                                handleDeleteMessage={handleDeleteMessage}
+                                handleDeleteMessage={requestDeleteMessage}
                             />
                             <FormSendMessage
-                                fetchSendMessage={fetchSendMessage}
+                                handleSendMessage={requestSendMessage}
                                 refDiv={refDiv}
                                 socket={socket}
-                                setAlert={setAlert}
+                                //setAlert={setAlert}
                             />
                         </>))
                     }

@@ -5,6 +5,7 @@ import post from "./post"
 import comment from "./comment"
 import dialog from "./dialog"
 import message from "./message"
+import socket from "./socket"
 
 const rootReducer = combineReducers({
     user,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
     post,
     comment,
     message,
-    dialog
+    dialog,
+    socket
 })
 
 export default rootReducer

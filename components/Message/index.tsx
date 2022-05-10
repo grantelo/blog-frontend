@@ -6,6 +6,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ReadIcon from '../../public/static/img/read.svg';
 import UnreadIcon from '../../public/static/img/unread.svg';
 import Time from "../Time";
+import { RequestDeleteMessageAction } from "../../redux/types/message";
 
 const useStyle = makeStyles(() => ({
     root: {
@@ -82,7 +83,7 @@ interface MessageProps {
     read?: boolean
     isTyping?: boolean
     avatar: string,
-    handleDeleteMessage?: (messageId: string) => void,
+    handleDeleteMessage?: (messageId: number) => RequestDeleteMessageAction,
 }
 
 const Message: React.FC<MessageProps> =

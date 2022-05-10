@@ -41,11 +41,9 @@ const useStyle = makeStyles(theme => ({
 
 interface SidebarProps {
     user: IUser,
-    handleUpdateUser: (userData: UpdateUserRequest) => AppThunk<UserActions, void>
-
 }
 
-const Sidebar: FC<SidebarProps> = ({user, handleUpdateUser}) => {
+const Sidebar: FC<SidebarProps> = ({user}) => {
     const classes = useStyle()
     const currentDialogId = useTypedSelector<number>(({dialog}) => dialog.currentDialogId)
     const dialogs = useTypedSelector<IDialog[]>(({dialog}) => dialog.items)

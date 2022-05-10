@@ -1,6 +1,5 @@
 import IError from "../../models/IError";
 import {IMessage} from "../../models/IMessage";
-import { SendMessageRequest } from "../../models/request/SendMessageRequest";
 
 export enum MessageActionTypes {
     SET_IS_LOADING_MESSAGE = "SET_IS_LOADING_MESSAGE",
@@ -30,7 +29,6 @@ export interface SetIsLoadingMessageAction {
 
 export interface RequestMessagesAction {
     type: MessageActionTypes.REQUEST_MESSAGES,
-    payload: number
 }
 
 export interface RequestMessagesSuccessAction {
@@ -51,6 +49,7 @@ export interface RequestDeleteMessageAction {
 
 export interface RequestDeleteMessageSuccessAction {
     type: MessageActionTypes.REQUEST_DELETE_MESSAGE_SUCCESS,
+    payload: number
 }
 
 export interface RequestDeleteMessageErrorAction {
@@ -65,7 +64,7 @@ export interface AddMessageAction {
 
 export interface RequestSendMessageAction {
     type: MessageActionTypes.REQUEST_SEND_MESSAGE,
-    payload: SendMessageRequest
+    payload: string
 }
 
 export interface RequestSendMessageSuccessAction {
@@ -75,6 +74,7 @@ export interface RequestSendMessageSuccessAction {
 
 export interface RequestSendMessageErrorAction {
     type: MessageActionTypes.REQUEST_SEND_MESSAGE_ERROR,
+    payload: IError
 }
 
 export interface SetReadedStatusLastMessagesAction {

@@ -2,7 +2,7 @@ import { IDialog } from "../../models/IDialog";
 import IError from "../../models/IError";
 import { IMessage } from "../../models/IMessage";
 import { CreateDialogRequest } from "../../models/request/CreateDialogRequest";
-import { DialogActionTypes, RequestCreateDialogAction, RequestDeleteDialogAction, DeleteMessageAction, RequestDialogsAction, SetCurrentDialogAction, SetReadedStatusLastMessageAction, SetIsLoadingDialogAction, SetIsOnlineDialogAction, RequestDialogsSuccessAction, RequestDialogsErrorAction } from "../types/dialog";
+import { DialogActionTypes, RequestCreateDialogAction, RequestDeleteDialogAction, DeleteMessageAction, RequestDialogsAction, SetCurrentDialogAction, SetReadedStatusLastMessageAction, SetIsLoadingDialogAction, SetIsOnlineDialogAction, RequestDialogsSuccessAction, RequestDialogsErrorAction, RequestDeleteDialogSuccessAction, RequestDeleteDialogErrorAction, RequestCreateDialogSuccessAction, RequestCreateDialogErrorAction } from "../types/dialog";
 
 export const requestDialogs = (): RequestDialogsAction => ({
     type: DialogActionTypes.REQUEST_DIALOGS,
@@ -23,8 +23,28 @@ export const requestDeleteDialog = (payload: number): RequestDeleteDialogAction 
     payload
 })
 
-export const requesCreateDialog = (payload: CreateDialogRequest): RequestCreateDialogAction => ({
+export const requestDeleteDialogSuccess = (payload: number): RequestDeleteDialogSuccessAction => ({
+    type: DialogActionTypes.REQUEST_DELETE_DIALOG_SUCCESS,
+    payload
+})
+
+export const requestDeleteDialogError = (payload: IError): RequestDeleteDialogErrorAction => ({
+    type: DialogActionTypes.REQUEST_DELETE_DIALOG_ERROR,
+    payload
+})
+
+export const requestCreateDialog = (payload: CreateDialogRequest): RequestCreateDialogAction => ({
     type: DialogActionTypes.REQUEST_CREATE_DIALOG,
+    payload
+})
+
+export const requestCreateDialogSuccess = (payload: IDialog): RequestCreateDialogSuccessAction => ({
+    type: DialogActionTypes.REQUEST_CREATE_DIALOG_SUCCESS,
+    payload
+})
+
+export const requestCreateDialogError = (payload: IError): RequestCreateDialogErrorAction => ({
+    type: DialogActionTypes.REQUEST_CREATE_DIALOG_ERROR,
     payload
 })
 
@@ -38,11 +58,11 @@ export const setReadedStatusLastMessage = (payload: number): SetReadedStatusLast
     payload
 })
 
-export const deleteMessage = (dialogId: number, messageId: number): DeleteMessageAction => ({
+export const deleteMessage = (dialogId: number, message: IMessage): DeleteMessageAction => ({
     type: DialogActionTypes.DELETE_MESSAGE,
     payload: {
         dialogId,
-        messageId
+        message
     }
 })
 

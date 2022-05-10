@@ -3,6 +3,7 @@ import { Badge, Box, IconButton, makeStyles, Menu, MenuItem, Typography, withSty
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { IDialog } from "../../models/IDialog";
 import CustomBadge from "../CustomBadge";
+import { RequestDeleteDialogAction } from "../../redux/types/dialog";
 
 const useStyle = makeStyles(theme => ({
     root: {
@@ -50,8 +51,7 @@ const StyledBadge = withStyles((theme) => ({
 interface StatusProps {
     name: string,
     isOnline: boolean,
-    handleDeleteDialog: (dialogId: string) => AppThunk<DialogActions>,
-    handleLogoutUser: () => void
+    handleDeleteDialog: (dialogId: number) => RequestDeleteDialogAction,
     currentDialog: IDialog
 }
 
@@ -107,8 +107,6 @@ const Status:FC<StatusProps> = ({name, isOnline, handleDeleteDialog, currentDial
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                 >
-                    <MenuItem>Мой профиль</MenuItem>
-                    <MenuItem onClick={onLogout}>Выйти из аккаунта</MenuItem>
                     {currentDialog && <MenuItem onClick={onDeleteDialog}>Удалить диалог</MenuItem>}
                 </Menu>
             </Box>
