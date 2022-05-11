@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import * as _ from "lodash"
-import {bindActionCreators} from "redux";
+import {bindActionCreators } from "redux";
 import {Box, Dialog, DialogContent, DialogContentText, DialogTitle, Typography} from "@mui/material";
 import MainForm from "./forms/MainForm";
 import LoginForm from "./forms/LoginForm";
@@ -12,6 +12,8 @@ import styles from "./AuthDialog.module.sass"
 import useTypedSelector from "../../hooks/useTypedSelector";
 import {useDispatch} from "react-redux";
 import {UserState} from "../../redux/types/user";
+import Api from '../../utils/api';
+import ForgotPasswordForm from './forms/ForgotPasswordForm';
 
 interface AuthDialogProps {
     open: boolean;
@@ -21,7 +23,8 @@ interface AuthDialogProps {
 enum FormType {
     Main,
     Registration,
-    Login
+    Login,
+    ForgotPassword
 }
 
 const AuthDialog: FC<AuthDialogProps> = ({open, handleClose}) => {
@@ -29,6 +32,7 @@ const AuthDialog: FC<AuthDialogProps> = ({open, handleClose}) => {
     const dispatch = useDispatch()
     const {requestUserLoginAction, requestUserRegistrationAction} = bindActionCreators(UserActionCreators, dispatch)
     const {user, isLoading, error} = useTypedSelector<UserState>(state => state.user)
+    
 
     // React.useEffect(() => {
     //     if(!_.isEmpty(user)) handleClose()
@@ -39,13 +43,13 @@ const AuthDialog: FC<AuthDialogProps> = ({open, handleClose}) => {
             case FormType.Main:
                 return <MainForm/>
             case FormType.Login:
-                return <LoginForm requestUserLoginAction={requestUserLoginAction} handleClose={handleClose} isLoading={isLoading} error={error} onOpenRegistrationForm={() => setFormType(FormType.Registration)}/>
+                return <LoginForm requestUserLoginAction={requestUserLoginAction} handleClose={handleClose} isLoading={isLoading} error={error} onOpenRegistrationForm={() => setFormType(FormType.Registration)} onOpenForgotPasswordForm={() => setFormType(FormType.ForgotPassword)}/>
             case FormType.Registration:
                 return <RegistrationForm requestUserRegistrationAction={requestUserRegistrationAction} handleClose={handleClose} isLoading={isLoading} error={error} onOpenLoginForm={() => setFormType(FormType.Login)}/>
+            case FormType.ForgotPassword:
+                return <ForgotPasswordForm />
         }
     }
-
-
 
     return (
         <>

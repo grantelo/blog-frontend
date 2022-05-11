@@ -7,6 +7,9 @@ import {
   deleteCommentSaga,
   updateCommentSaga,
 } from "./commentSaga";
+import { requestDeleteMessageSaga, requestMessagesSaga, requestSendMessageSaga } from "./messageSaga";
+import { requestDialogsSaga, requestDeleteDialogSaga, requestCreateDialogSaga, setCurrentDialogSaga } from "./dialogSaga";
+
 
 export default function* rootSaga() {
   const sagas = [
@@ -18,6 +21,13 @@ export default function* rootSaga() {
     updateCommentSaga,
     deleteCommentSaga,
     userUpdateProfileSaga,
+    requestSendMessageSaga,
+    requestMessagesSaga,
+    requestDeleteMessageSaga,
+    requestDialogsSaga,
+    requestDeleteDialogSaga, 
+    requestCreateDialogSaga,
+    setCurrentDialogSaga
   ];
 
   yield all(sagas.map((saga) => spawn(saga)));

@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { TextField } from "@mui/material";
-import { useFormContext } from "react-hook-form";
+import { useFormContext} from "react-hook-form";
 
 interface FormFieldProps {
   name: string;
@@ -15,8 +15,7 @@ const FormField: FC<FormFieldProps> = ({ name, label, value }) => {
   } = useFormContext();
 
   return (
-    <TextField
-      {...register(name)}
+    <TextField {...register(name)}
       name={name}
       label={label}
       defaultValue={value}

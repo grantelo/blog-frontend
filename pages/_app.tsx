@@ -2,6 +2,7 @@ import React from "react";
 import Head from "next/head";
 import type { AppProps } from "next/app";
 import App from "next/app";
+import nookies from "nookies";
 import { END } from "redux-saga";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
@@ -13,10 +14,19 @@ import "../styles/globals.sass";
 import { Store } from "redux";
 import Api from "../utils/api";
 import { setUserAction } from "../redux/actions/user";
+import createEmotionCache from "../utils/createEmotionCache";
+import { CacheProvider, EmotionCache } from "@emotion/react";
 
-function MyApp({ Component, pageProps }: AppProps) {
+const clientSideEmotionCache = createEmotionCache();
+interface MyAppProps extends AppProps {
+  emotionCache?: EmotionCache;
+}
+
+function MyApp(props: MyAppProps) {
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  
   return (
-    <>
+    <CacheProvider value={emotionCache}>
       <Head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -34,7 +44,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Header />
         <Component {...pageProps} />
       </ThemeProvider>
-    </>
+    </CacheProvider>
   );
 }
 
@@ -45,7 +55,6 @@ MyApp.getInitialProps = wrapper.getInitialAppProps(
       store.dispatch(setUserAction(response.data));
     } catch (e) {
       console.log("error in getinitialprops");
-      console.log(e);
       console.log("end");
     }
 
@@ -65,3 +74,4 @@ MyApp.getInitialProps = wrapper.getInitialAppProps(
 );
 
 export default wrapper.withRedux(MyApp);
+

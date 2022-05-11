@@ -1,4 +1,4 @@
-import {applyMiddleware, combineReducers, compose, createStore, Store} from 'redux';
+import {applyMiddleware, compose, createStore, Store} from 'redux';
 import {createWrapper, Context} from 'next-redux-wrapper';
 import rootReducer from "./reducers";
 import createSagaMiddleware from "@redux-saga/core";
@@ -14,7 +14,7 @@ export interface SagaStore extends Store {
 let composeEnhancers = compose;
 
 if(typeof window !== "undefined") {
-    composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?? compose
 }
 
 let store: Store;
