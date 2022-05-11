@@ -7,6 +7,7 @@ import { CreateDialogRequest } from "../../models/request/CreateDialogRequest";
 const DialogApi = (instance: AxiosInstance) => ({
     create: (usersIds: CreateDialogRequest) => instance.post(`${baseURL}/dialog`),
     findAll: () => instance.get<IDialog[]>(`${baseURL}/dialog`),
+    find: (dialogId: number) => instance.get<IDialog>(`{baseURL}/dialog/${dialogId}`),
     delete: (dialogId: number) => instance.delete(`${baseURL}/dialog/${dialogId}`),
 })
 

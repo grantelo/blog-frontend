@@ -1,5 +1,5 @@
 import { Badge, BadgeOrigin } from "@mui/material";
-import { withStyles } from "@mui/material/styles";
+import { withStyles } from "@mui/styles";
 import { FC } from "react";
 
 const styles = (props: any) => ({
@@ -22,7 +22,7 @@ const CustomBadge:FC<CustomBadgeProps> = ({isOnline, anchorOrigin, children}) =>
 
     return (
         <Component
-            overlap="circle"
+            overlap="circular"
             variant="dot"
             anchorOrigin={anchorOrigin}
         >

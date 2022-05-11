@@ -1,4 +1,5 @@
-import { Box, Container, makeStyles } from "@mui/material";
+import { Box, Container} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { FC } from "react";
 import { IMessage } from "../../models/IMessage";
 import { IUser } from "../../models/IUser";

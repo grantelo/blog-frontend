@@ -1,5 +1,5 @@
 import { Box, IconButton } from "@mui/material";
-import { makeStyles } from "@mui/material/styles";
+import makeStyles from '@mui/styles/makeStyles';
 import classNames from "classnames";
 import React, { ChangeEvent, FC, SyntheticEvent, useRef, useState } from "react";
 import {Socket} from "socket.io-client"
@@ -53,7 +53,7 @@ const FormSendMessage: FC<FormSendMessageProps> = ({handleSendMessage, refDiv, s
     const classes = useStyle()
     const [value, setValue] = useState<string>("")
     const emojiRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null)
-    let range: Range = new Range();
+    //let range: Range = new Range();
 
     const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
         e.preventDefault()

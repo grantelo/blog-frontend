@@ -34,8 +34,8 @@ export const messageReducer = (state = initialState, action: AnyAction): Message
                 items: [...state.items, action.payload],
                 isLoading: false,
             }
-        }
-
+        } 
+        
         case MessageActionTypes.REQUEST_DELETE_MESSAGE_SUCCESS: {
             return {
                 ...state,

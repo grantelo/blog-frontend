@@ -1,5 +1,7 @@
 import React, { FC } from "react";
-import { Badge, Box, IconButton, makeStyles, Menu, MenuItem, Typography, withStyles } from "@mui/material";
+import { Badge, Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
+import { withStyles } from "@mui/styles";
+import makeStyles from '@mui/styles/makeStyles';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { IDialog } from "../../models/IDialog";
 import CustomBadge from "../CustomBadge";
@@ -49,8 +51,8 @@ const StyledBadge = withStyles((theme) => ({
 }))(Badge);
 
 interface StatusProps {
-    name: string,
-    isOnline: boolean,
+    name?: string,
+    isOnline?: boolean,
     handleDeleteDialog: (dialogId: number) => RequestDeleteDialogAction,
     currentDialog: IDialog
 }

@@ -1,16 +1,10 @@
-import Router from 'next/router'
 import {call, put, takeEvery, select} from "redux-saga/effects";
 import Api from "../../../utils/api";
 import {AxiosResponse} from "axios";
-import {requestAddPostError, requestAddPostSuccess, setIsLoadingPost} from "../../actions/post";
 import IError from "../../../models/IError";
-import {IPost} from "../../../models/IPost";
-import { DialogActionTypes, RequestCreateDialogAction, RequestDeleteDialogAction, RequestDialogsAction } from '../../types/dialog';
-import { deleteMessage, requestDialogsError, requestDialogsSuccess, setIsLoadingDialog } from '../../actions/dialog';
-import { IDialog } from '../../../models/IDialog';
-import { requestDeleteCommentSuccessAction } from '../../actions/comment';
+import { deleteMessage, setIsLoadingDialog } from '../../actions/dialog';
 import { MessageActionTypes, RequestDeleteMessageAction, RequestSendMessageAction } from '../../types/message';
-import { requestDeleteMessageError, requestDeleteMessageSuccess, requestMessagesError, requestMessagesSuccess, requestSendMessageError, requestSendMessageSuccess, setIsLoadingMessage } from '../../actions/message';
+import { addMessage, requestDeleteMessageError, requestDeleteMessageSuccess, requestMessagesError, requestMessagesSuccess, requestSendMessageError, requestSendMessageSuccess, setIsLoadingMessage } from '../../actions/message';
 import { IMessage } from '../../../models/IMessage';
 import { RootState } from '../../store';
 
@@ -20,6 +14,7 @@ export function* requestSendMessage({payload: text}: RequestSendMessageAction) {
         const dialogId: number = yield select<(state: RootState) => number>((state) => state.dialog.currentDialogId);
         const response: AxiosResponse<IMessage> = yield call(Api().message.send, {text, dialogId})
         yield put(requestSendMessageSuccess(response.data))
+        yield put(addMessage(response.data))
     } catch (e) {
         yield put(requestSendMessageError(e as IError))
     }
@@ -49,9 +44,11 @@ export function* requestDeleteMessageSaga() {
 
 export function* requestMessages() {
     try {
+        console.log("requestMessages");        
         yield put(setIsLoadingMessage(true))
         const dialogId: number = yield select<(state: RootState) => number>((state) => state.dialog.currentDialogId);
         const response: AxiosResponse<IMessage[]> = yield call(Api().message.findAllByDialog, dialogId)
+        console.log(response.data);
         yield put(requestMessagesSuccess(response.data))
     } catch (e) {
         yield put(requestMessagesError(e as IError))

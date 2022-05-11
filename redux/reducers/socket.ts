@@ -1,18 +1,15 @@
-import {SocketState, SocketTypes} from "../types/socket";
-import {io} from "socket.io-client";
-import { HYDRATE } from "next-redux-wrapper";
 import { AnyAction } from "redux";
+import {io} from "socket.io-client";
+import {SocketState, SocketTypes} from "../types/socket";
 
 const initialState: SocketState = {
     socket: null
 }
 
-export const socketReducer = (state = initialState, action: AnyAction): SocketState => {
+const socketReducer = (state = initialState, action: AnyAction): SocketState => {
     switch (action.type) {
-        case HYDRATE:
-            return { ...state, ...action.payload.socket };
         case SocketTypes.SET_SOCKET:
-            return {...state, socket: io({query: {userId: action.payload}})}
+            return {...state, socket: io(process.env.NEXT_PUBLIC_API_URL!, {query: {userId: action.payload}})}
         default:
             return state
     }

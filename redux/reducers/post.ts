@@ -1,5 +1,4 @@
 import {PostActionTypes, PostState} from "../types/post";
-import IError from "../../models/IError";
 import {AnyAction} from "redux";
 import {HYDRATE} from "next-redux-wrapper";
 

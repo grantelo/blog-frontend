@@ -27,7 +27,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         const post = await Api(ctx).post.getOne(+id)
         const user = await Api(ctx).user.getMe()
 
-        console.log(post.data)
+        //console.log(post.data)
 
         if (post.data.user.id !== user.data.id) return {
             redirect: {

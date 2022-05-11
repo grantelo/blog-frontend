@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Post from "../components/Post";
 import MainLayout from "../layouts/MainLayout";
+import IError from "../models/IError";
 import { IPost } from "../models/IPost";
 import { requestPostsError, requestPostsSuccess } from "../redux/actions/post";
 import { wrapper } from "../redux/store";
@@ -30,8 +31,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     try {
       const response = await Api(context).post.getAll();
-      console.log("bbbbbbbbbbbbbb")
-      console.log(response.data)
 
       store.dispatch(requestPostsSuccess(response.data));
 
@@ -41,7 +40,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
         },
       };
     } catch (e) {
-      store.dispatch(requestPostsError(e));
+      console.log("dsasdadd");
+      console.log(e);
+      
+      
+      store.dispatch(requestPostsError(e as IError));
 
       return {
         props: {},

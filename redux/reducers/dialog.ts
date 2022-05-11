@@ -1,11 +1,11 @@
 import { HYDRATE } from "next-redux-wrapper";
 import { AnyAction } from "redux";
-import {DialogActions, DialogActionTypes, DialogState} from "../types/dialog";
-import {MessageActions, MessageActionTypes} from "../types/message";
+import {DialogActionTypes, DialogState} from "../types/dialog";
+import { MessageActionTypes} from "../types/message";
 
 const initialState : DialogState = {
     items: [],
-    currentDialogId: +window.location.pathname.split("dialogs/")[1],
+    currentDialogId: typeof window !== "undefined" && +window?.location.pathname.split("dialogs/")[1],
     isLoading: false,
     error: null
 }
@@ -60,6 +60,9 @@ export const dialogReducer = (state = initialState, action: AnyAction): DialogSt
             return {...state, isLoading: action.payload}
 
         case DialogActionTypes.SET_CURRENT_DIALOG:
+            // console.log(("yes"));
+            // console.log(action.payload);
+            
             return {...state, currentDialogId: action.payload, isLoading: false}
 
         case DialogActionTypes.SET_READED_STATUS_LAST_MESSAGE:

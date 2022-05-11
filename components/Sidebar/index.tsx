@@ -1,4 +1,5 @@
-import { Box, InputAdornment, makeStyles, TextField, Typography } from "@mui/material";
+import { Box, InputAdornment, TextField } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import SearchIcon from '@mui/icons-material/Search';
 import { FC, useState } from "react";
 import useTypedSelector from "../../hooks/useTypedSelector";
@@ -55,10 +56,10 @@ const Sidebar: FC<SidebarProps> = ({user}) => {
 
     const checkDialog = (dialog: IDialog, filter: string): boolean => {
         const f = (user: IUser): boolean => {
-            return user.fullName.startsWith(filter)
+            return user?.fullName.startsWith(filter)
         }
 
-        return f(dialog.users.find(item => item.id === user.id)!)
+        return f(dialog.users.find(item => item.id === user.id))
     }
 
     const filterDialogs = (dialogs: IDialog[]): IDialog[] => dialogs.filter(dialog => checkDialog(dialog, filter))

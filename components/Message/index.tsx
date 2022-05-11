@@ -1,10 +1,10 @@
 import { useState } from "react"
 import { Avatar, Box, IconButton, Menu, MenuItem, SvgIcon, Typography } from "@mui/material"
-import { makeStyles } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import classNames from "classnames"
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import ReadIcon from '../../public/static/img/read.svg';
-import UnreadIcon from '../../public/static/img/unread.svg';
+import {ReactComponent as ReadIcon} from "../../public/static/img/read.svg"
+import {ReactComponent as UnreadIcon} from "../../public/static/img/unread.svg"
 import Time from "../Time";
 import { RequestDeleteMessageAction } from "../../redux/types/message";
 

@@ -1,4 +1,5 @@
-import { Box, makeStyles, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { ChangeEvent, FC } from "react";
 
 const useStyle = makeStyles(theme => ({

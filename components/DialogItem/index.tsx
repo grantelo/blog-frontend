@@ -1,4 +1,5 @@
 import { Badge, Box, Typography } from "@mui/material"
+import { makeStyles } from "@mui/styles"
 import classNames from "classnames"
 import format from "date-fns/format"
 import isToday from "date-fns/isToday"
@@ -74,13 +75,13 @@ const DialogItem: React.FC<DialogItemProps> = ({id, users, lastMessage, countUnr
     const classes = useStyle()
 
     return (
-        <Link href={`/dialogs/${id}`} passHref>
+        <Link href={`dialogs/${id}`} passHref shallow>
             <a className={classes.link}>
             <Box className={classNames(classes.root, {[classes.selected]: selected})}>
                 <Box className={classes.avatar}>
-                    <CustomAvatar avatar={users[0].avatar} isOnline={users[0].isOnline}/>
+                    <CustomAvatar avatar={users[0]?.avatar} isOnline={users[0]?.isOnline}/>
                     <Box className={classes.box}>
-                        <Typography className={classes.name}>{users[0].fullName}</Typography>
+                        <Typography className={classes.name}>{users[0]?.fullName}</Typography>
                         <Typography className={classes.lastMessage}>
                             {lastMessage.text}
                         </Typography>

@@ -1,13 +1,12 @@
-import Router from 'next/router'
-import {call, put, takeEvery} from "redux-saga/effects";
+import {call, put, select, takeEvery} from "redux-saga/effects";
 import Api from "../../../utils/api";
 import {AxiosResponse} from "axios";
-import {requestAddPostError, requestAddPostSuccess, setIsLoadingPost} from "../../actions/post";
 import IError from "../../../models/IError";
-import {IPost} from "../../../models/IPost";
-import { DialogActionTypes, RequestCreateDialogAction, RequestDeleteDialogAction, RequestDialogsAction } from '../../types/dialog';
-import { requestCreateDialogError, requestCreateDialogSuccess, requestDeleteDialogError, requestDeleteDialogSuccess, requestDialogsError, requestDialogsSuccess, setIsLoadingDialog } from '../../actions/dialog';
+import { DialogActionTypes, RequestCreateDialogAction, RequestDeleteDialogAction, SetCurrentDialogAction} from '../../types/dialog';
+import { requestCreateDialogError, requestCreateDialogSuccess, requestDeleteDialogError, requestDeleteDialogSuccess, requestDialogsError, requestDialogsSuccess, setCurrentDialog, setIsLoadingDialog } from '../../actions/dialog';
 import { IDialog } from '../../../models/IDialog';
+import { Socket } from "socket.io-client";
+import { RootState } from "../../store";
 
 export function* requestCreateDialog({payload}: RequestCreateDialogAction) {
     try {
@@ -49,4 +48,14 @@ export function* requestDialogs() {
 
 export function* requestDialogsSaga() {
     yield takeEvery(DialogActionTypes.REQUEST_DIALOGS, requestDialogs)
+}
+
+export function* setCurrent({payload}:SetCurrentDialogAction){
+    const socket: Socket = yield select<(state: RootState) => Socket>(state => state.socket.socket!)
+    yield put(setCurrentDialog(payload))
+    socket.emit("dialog:join", payload)
+}
+
+export function* setCurrentDialogSaga() {
+    yield takeEvery(DialogActionTypes.SET_CURRENT_DIALOG, setCurrent)
 }

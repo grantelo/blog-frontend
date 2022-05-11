@@ -1,6 +1,7 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { bindActionCreators } from "redux";
-import { Box, Container, makeStyles, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import {Socket} from "socket.io-client";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { IDialog } from "../../models/IDialog";
@@ -84,7 +85,7 @@ const Dialog: FC<DialogProps> = ({user, currentDialog, socket}) => {
     const isLoading: boolean = useTypedSelector<boolean>(({message}) => message.isLoading)
     const items: IMessage[] = useTypedSelector<IMessage[]>(({message}) => message.items)
     let typingTimeoutId: number | null = null
-    const partner = currentDialog.users.find(item => item.id !== user.id)!
+    const partner = currentDialog?.users?.find(item => item.id !== user.id)
     const refDiv: React.RefObject<HTMLDivElement> = useRef(null)
 
     useEffect(() => {
@@ -99,10 +100,19 @@ const Dialog: FC<DialogProps> = ({user, currentDialog, socket}) => {
     }, [])
 
     useEffect(() => {
+        console.log("useEffect");
+        console.log(currentDialog?.id);
+        
+        
         if (currentDialog?.id)
             requestMessages()
 
+        console.log("поставил");
+        console.log(socket);
+        
         socket?.on("message:created", handleAddMessage)
+        console.log("ok");
+        
         socket?.on("messages:readed", (dialogId: number, userId: number) => {
             if (userId === user.id) return
 
@@ -121,6 +131,10 @@ const Dialog: FC<DialogProps> = ({user, currentDialog, socket}) => {
     }, [currentDialog?.id])
 
     const handleAddMessage = (message: IMessage) => {
+        alert("здесь");
+        console.log();
+        
+        console.log(message)
         if (message.user.id === user.id) return
 
         if (message.dialog.id === currentDialog?.id) {
@@ -153,12 +167,12 @@ const Dialog: FC<DialogProps> = ({user, currentDialog, socket}) => {
     return (
         <Box className={classes.root}>
             <Status
-                name={partner.fullName}
-                isOnline={partner.isOnline}
+                name={partner?.fullName}
+                isOnline={partner?.isOnline}
                 handleDeleteDialog={requestDeleteDialog}
                 currentDialog={currentDialog}
             />
-            <Container className={classes.contanier}>
+            <Box className={classes.contanier}>
                 <Box className={classNames(classes.messagesBox, {[classes.emptyDialog]: !currentDialog})}>
                     {!isLoading && (!currentDialog?.id ? (
                             <>
@@ -191,7 +205,7 @@ const Dialog: FC<DialogProps> = ({user, currentDialog, socket}) => {
                         </>))
                     }
                 </Box>
-            </Container>
+            </Box>
         </Box>
     );
 };
