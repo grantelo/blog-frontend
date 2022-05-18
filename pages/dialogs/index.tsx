@@ -1,5 +1,5 @@
-import { Box, ThemeProvider } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import { createTheme, Paper } from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
 import { bindActionCreators } from "redux";
 import { useDispatch } from "react-redux";
 import { Socket } from "socket.io-client";
@@ -11,92 +11,96 @@ import MainLayout from "../../layouts/MainLayout";
 import { IDialog } from "../../models/IDialog";
 import IError from "../../models/IError";
 import { IUser } from "../../models/IUser";
-import { requestDialogsError, requestDialogsSuccess } from "../../redux/actions/dialog";
+import * as DialogActionCreators from "../../redux/actions/dialog";
+import {
+  requestDialogsError,
+  requestDialogsSuccess,
+} from "../../redux/actions/dialog";
 import { wrapper } from "../../redux/store";
-import { DialogState } from "../../redux/types/dialog";
-import * as DialogActionCreators from "../../redux/actions/dialog"
-import * as SocketActionCreators from "../../redux/actions/socket"
+import * as SocketActionCreators from "../../redux/actions/socket";
 import Api from "../../utils/api";
 import { useEffect } from "react";
 import _ from "lodash";
 import { useRouter } from "next/router";
-import {createTheme} from "@mui/material";
-
 
 const useStyle = makeStyles(() => ({
-    root: {
-        display: "flex",
-        height: "100%"
-    }
-}))
+  root: {
+    display: "flex",
+    height: "100%",
+  },
+}));
 
-const theme = createTheme({})
+const theme = createTheme({});
 
 const Dialogs = () => {
-    const classes = useStyle()
-    const dispatch = useDispatch()
-    const {requestDialogs, setCurrentDialog, setSocket} = bindActionCreators(
-        Object.assign({}, DialogActionCreators, SocketActionCreators), dispatch
-    )
-    
-    const user:IUser = useTypedSelector<IUser>(({user}) => user.user)
-    const isActivated:boolean = useTypedSelector<boolean>(({user}) => user.user.isActivated)
-    const currentDialog:IDialog = useTypedSelector<IDialog>(({dialog}) => _.find(dialog.items, {id: dialog.currentDialogId})!)
-    const socket: Socket | null = useTypedSelector<Socket | null>(({socket}) => socket.socket)
-    const router = useRouter()
-    
-    useEffect(() => {
-        requestDialogs()
-        setSocket(user.id)
-    }, [])
+  const classes = useStyle();
+  const dispatch = useDispatch();
+  const { requestDialogs, setCurrentDialog, setSocket } = bindActionCreators(
+    Object.assign({}, DialogActionCreators, SocketActionCreators),
+    dispatch
+  );
 
-    useEffect(() => {
-        
-        const dialogId: number = +router.asPath.split("dialogs/")[1]
-        if(!dialogId) return
+  const user: IUser = useTypedSelector<IUser>(({ user }) => user.user);
+  const isActivated: boolean = useTypedSelector<boolean>(
+    ({ user }) => user.user.isActivated
+  );
+  const currentDialogId = useTypedSelector<number>(
+    ({ dialog }) => dialog.currentDialogId
+  );
+  const dialogs = useTypedSelector<IDialog[]>(({ dialog }) => dialog.items);
+  const currentDialog: IDialog = _.find(dialogs, { id: currentDialogId })!;
 
-        setCurrentDialog(dialogId)
-    }, [router.asPath])
+  console.log("currentDialog");
+  console.log(currentDialog.users);
 
-    return (
-        <ThemeProvider theme={theme}>
-      
-      <MainLayout fullWidth>
-        {socket && <Box className={classes.root}>
-                    <Sidebar
-                        user={user}
-                    />
-                    <Dialog
-                        currentDialog={currentDialog}
-                        user={user}
-                        socket={socket}
-                    />
-                </Box>}
-      </MainLayout>
-      </ThemeProvider>
-    );
+  const socket: Socket | null = useTypedSelector<Socket | null>(
+    ({ socket }) => socket.socket
+  );
+  const router = useRouter();
+
+  useEffect(() => {
+    requestDialogs();
+  }, []);
+
+  useEffect(() => {
+    const dialogId: number = +router.asPath.split("dialogs/")[1];
+    if (!dialogId) return;
+
+    setCurrentDialog(dialogId);
+  }, [router.asPath]);
+
+  return (
+    <MainLayout fullWidth>
+      {socket && (
+        <Paper className={classes.root}>
+          <Sidebar user={user} />
+          <Dialog currentDialog={currentDialog} user={user} socket={socket} />
+        </Paper>
+      )}
+    </MainLayout>
+  );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(store => async (context) => {
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
     try {
-        const response = await Api(context).dialog.findAll()
+      const response = await Api(context).dialog.findAll();
 
-        store.dispatch(requestDialogsSuccess(response.data))
+      store.dispatch(requestDialogsSuccess(response.data));
 
-        return {
-            props: {}
-        }
+      return {
+        props: {},
+      };
+    } catch (e) {
+      store.dispatch(requestDialogsError(e.message as IError));
+      return {
+        props: {},
+      };
     }
-    catch(e) {
-        store.dispatch(requestDialogsError((e.message) as IError))
-        return {
-            props: {},
-          };
-    }
-})
+  }
+);
 
-export default Dialogs
-
+export default Dialogs;
 
 /*
 import { Box } from "@mui/material";
@@ -138,13 +142,13 @@ const Dialogs = () => {
     const {requestDialogs, setCurrentDialog, setSocket} = bindActionCreators(
         Object.assign({}, DialogActionCreators, SocketActionCreators), dispatch
     )
-    
+
     const user:IUser = useTypedSelector<IUser>(({user}) => user.user)
     const isActivated:boolean = useTypedSelector<boolean>(({user}) => user.user.isActivated)
     const currentDialog:IDialog = useTypedSelector<IDialog>(({dialog}) => _.find(dialog.items, {id: dialog.currentDialogId})!)
     const socket: Socket | null = useTypedSelector<Socket | null>(({socket}) => socket.socket)
     const router = useRouter()
-    
+
     useEffect(() => {
         requestDialogs()
         setSocket(user.id)
@@ -158,7 +162,7 @@ const Dialogs = () => {
     }, [router.pathname])
 
     console.log(socket);
-    
+
 
     return (
       <MainLayout fullWidth>
@@ -184,7 +188,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async (con
         store.dispatch(requestDialogsSuccess(response.data))
         console.log("gggggg");
         console.log(id)
-        
+
         store.dispatch(setCurrentDialog(+id))
 
         return {
@@ -194,7 +198,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async (con
     catch(e) {
         console.log('ffxxx');
         console.log(e.message);
-        
+
         store.dispatch(requestDialogsError((e.message) as IError))
         return {
             props: {},

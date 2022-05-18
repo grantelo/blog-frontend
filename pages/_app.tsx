@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Head from "next/head";
 import type { AppProps } from "next/app";
 import App from "next/app";
-import nookies from "nookies";
 import { END } from "redux-saga";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
@@ -11,11 +10,16 @@ import Header from "../components/Header/index";
 import { SagaStore, wrapper } from "../redux/store";
 
 import "../styles/globals.sass";
-import { Store } from "redux";
+import { bindActionCreators, Store } from "redux";
 import Api from "../utils/api";
 import { setUserAction } from "../redux/actions/user";
 import createEmotionCache from "../utils/createEmotionCache";
 import { CacheProvider, EmotionCache } from "@emotion/react";
+import * as SocketActionCreators from "../redux/actions/socket";
+import { setSocket } from "../redux/actions/socket";
+import { useDispatch } from "react-redux";
+import { IUser } from "../models/IUser";
+import useTypedSelector from "../hooks/useTypedSelector";
 
 const clientSideEmotionCache = createEmotionCache();
 interface MyAppProps extends AppProps {
@@ -24,7 +28,14 @@ interface MyAppProps extends AppProps {
 
 function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  
+  const dispatch = useDispatch();
+  const { setSocket } = bindActionCreators(SocketActionCreators, dispatch);
+  const user: IUser = useTypedSelector<IUser>(({ user }) => user.user);
+
+  useEffect(() => {
+    setSocket(user.id);
+  }, []);
+
   return (
     <CacheProvider value={emotionCache}>
       <Head>
@@ -74,4 +85,3 @@ MyApp.getInitialProps = wrapper.getInitialAppProps(
 );
 
 export default wrapper.withRedux(MyApp);
-
