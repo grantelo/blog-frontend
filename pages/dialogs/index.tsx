@@ -50,9 +50,6 @@ const Dialogs = () => {
   const dialogs = useTypedSelector<IDialog[]>(({ dialog }) => dialog.items);
   const currentDialog: IDialog = _.find(dialogs, { id: currentDialogId })!;
 
-  console.log("currentDialog");
-  console.log(currentDialog.users);
-
   const socket: Socket | null = useTypedSelector<Socket | null>(
     ({ socket }) => socket.socket
   );

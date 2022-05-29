@@ -1,5 +1,6 @@
 import React, { FC } from "react";
-import { Box, List, ListItem, Paper, Typography } from "@mui/material";
+import { Box, List, ListItem, Paper, Stack, Typography } from "@mui/material";
+import Link from "next/link";
 import styles from "../Post/Post.module.sass";
 import Image from "next/image";
 import PostActions from "../PostActions";
@@ -18,7 +19,7 @@ const FullPost: FC<FullPostProps> = ({
   createdAt,
   updatedAt,
 }) => {
-  console.log(body);
+  console.log(tags);
 
   const renderBlock = (block: OutputBlockData) => {
     switch (block.type) {
@@ -53,17 +54,25 @@ const FullPost: FC<FullPostProps> = ({
       <Typography className={styles.title} variant={"h5"}>
         {title}
       </Typography>
-      <Box className={styles.content}>{body?.map(renderBlock)}</Box>
-      {/*<Typography className={styles.text}>*/}
-      {/*    Пока одни не могли соотнести размеры животного и окружения, другие начали создавать*/}
-      {/*    апокалиптические сюжеты с котом в главной роли.*/}
-      {/*</Typography>*/}
-      {/*<Image*/}
-      {/*    src={"https://leonardo.osnova.io/a21ca5a9-d95b-560d-9a6f-9fa87eff7fcd/-/preview/600/-/format/webp/"}*/}
-      {/*    height={500}*/}
-      {/*    width={600}*/}
-      {/*/>*/}
-      <PostActions />
+      <Box className={styles.content}>
+        {body?.map(renderBlock)}
+        <PostActions />
+        <Stack spacing={3} direction={"row"}>
+          {tags.split(" ").map((tag) => (
+            <Link href={`/search?query=${tag.replace("#", "%23")}`}>
+              {
+                <Typography
+                  sx={{ cursor: "pointer" }}
+                  fontSize={24}
+                  fontWeight={700}
+                >
+                  {tag}
+                </Typography>
+              }
+            </Link>
+          ))}
+        </Stack>
+      </Box>
     </Paper>
   );
 };

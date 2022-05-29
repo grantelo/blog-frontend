@@ -7,6 +7,7 @@ import { UpdateUserProfileRequest } from "../../models/request/UpdateProfileRequ
 export enum UserActionTypes {
   SET_USER = "SET_USER",
   SET_IS_LOADING_USER = "SET_IS_LOADING_USER",
+  LOGOUT_USER = "LOGOUT_USER",
   REQUEST_USER_REGISTRATION = "REQUEST_USERS_REGISTRATION",
   REQUEST_USER_REGISTRATION_SUCCESS = "REQUEST_USERS_REGISTRATION_SUCCESS",
   REQUEST_USER_REGISTRATION_ERROR = "REQUEST_USERS_REGISTRATION_ERROR",
@@ -90,8 +91,13 @@ export interface SetIsLoadingUser {
   payload: boolean;
 }
 
+export interface LogoutUser {
+  type: UserActionTypes.LOGOUT_USER;
+}
+
 export type UserActions =
   | SetUserAction
+  | LogoutUser
   | RequestUserLoginAction
   | RequestUserLoginSuccessAction
   | RequestUserLoginErrorAction

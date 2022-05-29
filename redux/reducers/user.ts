@@ -25,6 +25,14 @@ const user = (
     case UserActionTypes.SET_IS_LOADING_USER:
       return { ...state, isLoading: action.payload };
 
+    case UserActionTypes.LOGOUT_USER:
+      return {
+        ...state,
+        isAuth: false,
+        user: {} as IUser,
+        error: {} as IError,
+      };
+
     case UserActionTypes.REQUEST_USER_LOGIN_SUCCESS: {
       return {
         ...state,

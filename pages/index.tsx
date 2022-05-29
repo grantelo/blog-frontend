@@ -42,12 +42,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
     } catch (e) {
       console.log("dsasdadd");
       console.log(e);
-      
-      
+
       store.dispatch(requestPostsError(e as IError));
 
       return {
-        props: {},
+        props: {
+          posts: {},
+        },
       };
     }
   }

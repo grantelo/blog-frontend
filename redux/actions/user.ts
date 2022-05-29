@@ -1,4 +1,5 @@
 import {
+  LogoutUser,
   RequestUserLoginAction,
   RequestUserLoginErrorAction,
   RequestUserLoginSuccessAction,
@@ -94,4 +95,8 @@ export const requestUserUpdateProfileError = (
 export const setIsLoadingUser = (payload: boolean): SetIsLoadingUser => ({
   type: UserActionTypes.SET_IS_LOADING_USER,
   payload,
+});
+
+export const logoutUser = (): LogoutUser => ({
+  type: UserActionTypes.LOGOUT_USER,
 });

@@ -21,6 +21,7 @@ import {
 import AuthResponse from "../../../models/response/AuthResponse";
 import { AxiosResponse } from "axios";
 import {
+  logoutUser,
   requestUserLoginErrorAction,
   requestUserLoginSuccessAction,
   requestUserRegistrationErrorAction,
@@ -43,7 +44,9 @@ function* authorize(email: string, password: string) {
     });
     console.log("dksadajasjdisjdisdishh");
     yield put(requestUserLoginSuccessAction(response.data.user));
-    yield call(setCookie, null, "accessToken", response.data.accessToken, {path: '/'});
+    yield call(setCookie, null, "accessToken", response.data.accessToken, {
+      path: "/",
+    });
   } catch (e: any) {
     console.log(e);
     yield put(requestUserLoginErrorAction(e?.response?.data));
@@ -98,6 +101,12 @@ function* userProfileUpdate({
   }
 }
 
+function* logout() {
+  yield call(destroyCookie, null, "accessToken");
+  yield call(destroyCookie, null, "refreshToken");
+  yield put(logoutUser());
+}
+
 export function* loginSaga() {
   while (true) {
     const {
@@ -114,6 +123,10 @@ export function* loginSaga() {
 
     yield call(destroyCookie, null, "accessToken");
   }
+}
+
+export function* logoutSaga() {
+  yield takeEvery(UserActionTypes.REQUEST_USER_LOGOUT, logout);
 }
 
 export function* registrationSaga() {

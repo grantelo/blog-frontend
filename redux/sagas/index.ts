@@ -1,5 +1,10 @@
 import { all, spawn } from "redux-saga/effects";
-import { loginSaga, registrationSaga, userUpdateProfileSaga } from "./userSaga";
+import {
+  loginSaga,
+  logoutSaga,
+  registrationSaga,
+  userUpdateProfileSaga,
+} from "./userSaga";
 import { initializeAppSaga } from "./app";
 import { addPostSaga } from "./postSaga";
 import {
@@ -7,9 +12,17 @@ import {
   deleteCommentSaga,
   updateCommentSaga,
 } from "./commentSaga";
-import { requestDeleteMessageSaga, requestMessagesSaga, requestSendMessageSaga } from "./messageSaga";
-import { requestDialogsSaga, requestDeleteDialogSaga, requestCreateDialogSaga, setCurrentDialogSaga } from "./dialogSaga";
-
+import {
+  requestDeleteMessageSaga,
+  requestMessagesSaga,
+  requestSendMessageSaga,
+} from "./messageSaga";
+import {
+  requestCreateDialogSaga,
+  requestDeleteDialogSaga,
+  requestDialogsSaga,
+  setCurrentDialogSaga,
+} from "./dialogSaga";
 
 export default function* rootSaga() {
   const sagas = [
@@ -25,9 +38,10 @@ export default function* rootSaga() {
     requestMessagesSaga,
     requestDeleteMessageSaga,
     requestDialogsSaga,
-    requestDeleteDialogSaga, 
+    requestDeleteDialogSaga,
     requestCreateDialogSaga,
-    setCurrentDialogSaga
+    setCurrentDialogSaga,
+    logoutSaga,
   ];
 
   yield all(sagas.map((saga) => spawn(saga)));

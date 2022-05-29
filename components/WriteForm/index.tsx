@@ -45,14 +45,14 @@ const WriteForm: FC<WriteFormProps> = ({ post }) => {
   console.log(blocks);
 
   return (
-    <Box className={styles.box}>
+    <Box sx={{ height: "100%" }} className={styles.box}>
       <InputBase
         placeholder={"Введите заголовок"}
         className={styles.inputTitle}
         value={title.value}
         onChange={title.onChange}
       />
-      <Box>
+      <Box sx={{ overflowY: "auto", overflowX: "visible" }}>
         <Editor data={blocks} onChange={handleChangePost} />
       </Box>
       <InputBase
